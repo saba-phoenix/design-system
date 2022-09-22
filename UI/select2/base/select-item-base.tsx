@@ -3,7 +3,7 @@ import { ItemProps } from '@react-types/shared';
 
 import { CSS } from '../../../stitches.config';
 
-export type DropdownItemBaseProps<T = object> = ItemProps<T> & {
+export type SelectItemBaseProps<T = object> = ItemProps<T> & {
   as?: keyof JSX.IntrinsicElements;
   css?: CSS;
   command?: string;
@@ -11,8 +11,8 @@ export type DropdownItemBaseProps<T = object> = ItemProps<T> & {
   className?: string;
 };
 
-const DropdownItem = Item as (props: DropdownItemBaseProps) => JSX.Element;
+const SelectItem = Item as (props: SelectItemBaseProps) => JSX.Element;
 
-DropdownItem.toString = () => '.potionui-dropdown-item-base';
+SelectItem.toString = () => '.potionui-select-item-base';
 
-export default DropdownItem;
+export default SelectItem;

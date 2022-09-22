@@ -1,6 +1,8 @@
-import { ReactNode } from 'react';
+import { ReactNode, forwardRef } from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
+import { useDOMRef } from './utils/dom';
+import { useButton } from '@react-aria/button';
 
 import { CSS, styled } from '../stitches.config';
 import { Flex } from './Flex';
@@ -40,6 +42,10 @@ export const StyledButton = styled('button', {
 
   variants: {
     variant: {
+      noStyle: {
+        height: 'min-content',
+        color: '$white',
+      },
       primary: {
         backgroundColor: '$primaryBlue',
         color: '$white',
@@ -52,6 +58,21 @@ export const StyledButton = styled('button', {
         },
         '&:active': {
           backgroundColor: '$clickBlue',
+        },
+      },
+
+      danger: {
+        backgroundColor: '$red',
+        color: '$white',
+        px: '16px',
+        py: '4px',
+        '@hover': {
+          '&:hover': {
+            backgroundColor: '$hoverRed',
+          },
+        },
+        '&:active': {
+          backgroundColor: '$clickRed',
         },
       },
 
@@ -235,7 +256,9 @@ export const StyledButton = styled('button', {
 });
 
 const buttonType = {
+  noStyle: 'text',
   primary: 'text',
+  danger: 'text',
   secondary: 'text',
   primaryPlusIcon: 'text-icon',
   secondaryPlusIcon: 'text-icon',
@@ -249,6 +272,7 @@ const buttonType = {
 
 type Props = {
   variant:
+    | 'noStyle'
     | 'primary'
     | 'secondary'
     | 'primaryPlusIcon'
@@ -258,15 +282,26 @@ type Props = {
     | 'minimalPlusIcon'
     | 'minimalIcon'
     | 'secondaryIconSmall'
-    | 'minimalIconSmall';
+    | 'minimalIconSmall'
+    | 'danger';
   disabled?: boolean;
   css?: CSS;
+  onClick?: () => void;
   children?: ReactNode | ReactNode[];
 };
 
-export const Button = ({ variant, children, disabled = false, ...props }: Props) => {
+export const Button = forwardRef<HTMLButtonElement, Props>((allProps: Props, ref) => {
+  const { variant, children, disabled = false, onClick, ...props } = allProps;
+  const demoRef = useDOMRef(ref);
+  const { buttonProps } = useButton(allProps, demoRef);
   return (
-    <StyledButton variant={variant} disabled={disabled}>
+    <StyledButton
+      ref={demoRef}
+      variant={variant}
+      disabled={disabled}
+      {...buttonProps}
+      onClick={onClick}
+    >
       <span style={{ position: 'relative' }}>
         {buttonType[variant] === 'text-icon' && (
           <Flex gap={'4'}>
@@ -283,4 +318,4 @@ export const Button = ({ variant, children, disabled = false, ...props }: Props)
       </span>
     </StyledButton>
   );
-};
+});

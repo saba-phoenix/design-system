@@ -17,7 +17,6 @@ import { Toolbar } from '../custom/Toolbar';
 import { DarkThemeButton } from '../custom/DarkThemeButton';
 
 import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
-import { darkTheme } from '../stitches.config';
 
 function Test() {
   return (

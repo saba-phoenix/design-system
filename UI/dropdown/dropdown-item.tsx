@@ -1,221 +1,158 @@
-import type {FocusableProps} from "@react-types/shared";
-import type {SimpleColors, NormalWeights, DropdownVariants} from "../utils/prop-types";
-import type {IFocusRingAria, IMenuItemAria} from "./dropdown-types";
+import React, { ReactNode, Key, useRef, useMemo } from 'react';
 
-import React, {ReactNode, Key, useRef, useMemo} from "react";
-import {Node} from "@react-types/shared";
-import {mergeProps} from "@react-aria/utils";
-import {TreeState} from "@react-stately/tree";
-import {useFocusRing} from "@react-aria/focus";
-import {useHover, usePress} from "@react-aria/interactions";
-import {useMenuItem} from "@react-aria/menu";
+import { useFocusRing } from '@react-aria/focus';
+import { useHover, usePress } from '@react-aria/interactions';
+import { useOption } from '@react-aria/listbox';
+import { mergeProps } from '@react-aria/utils';
+import { TreeState } from '@react-stately/tree';
+import { ListState } from '@react-stately/list';
+import { Node } from '@react-types/shared';
+import type { FocusableProps } from '@react-types/shared';
 
-import {CSS} from "../theme/stitches.config";
-import Checkmark from "../utils/checkmark";
-import clsx from "../utils/clsx";
-import {__DEV__} from "../utils/assertion";
-
-import {useDropdownContext} from "./dropdown-context";
-import {
-  StyledDropdownItem,
-  StyledDropdownItemKbd,
-  StyledDropdownItemContent,
-  StyledDropdownItemIconWrapper,
-  StyledDropdownItemContentWrapper,
-  StyledDropdownItemDescription,
-} from "./dropdown.styles";
+import { CSS } from '../../stitches.config';
+import { CheckBox } from '../CheckBox';
+import { __DEV__ } from '../utils/assertion';
+import { useDropdownContext } from './dropdown-context';
+import type { IFocusRingAria, IOptionAria } from './dropdown-types';
+import { StyledDropdownItem, StyledDropdownItemContent } from './dropdown.styles';
+import { ContextMenu } from '@radix-ui/react-context-menu';
 
 interface Props<T> extends FocusableProps {
   item: Node<T>;
-  state: TreeState<T>;
-  color?: SimpleColors;
-  variant?: DropdownVariants;
-  textColor?: SimpleColors;
+  // state: ListState<T>;
   isVirtualized?: boolean;
   withDivider?: boolean;
   command?: string;
   description?: string;
   icon?: ReactNode;
-  dividerWeight?: NormalWeights;
   as?: keyof JSX.IntrinsicElements;
-  /**
-   * Whether the item description should be truncated or not.
-   */
-  showFullDescription?: boolean;
+
   onAction?: (key: Key) => void;
 }
 
 type NativeAttrs = Omit<React.HTMLAttributes<unknown>, keyof Props<object>>;
 
-export type DropdownItemProps<T = object> = Props<T> & NativeAttrs & {css?: CSS};
+export type SelectItemProps<T = object> = Props<T> & NativeAttrs & { css?: CSS };
 
 const DropdownItem = <T extends object>({
   as,
   css,
   item,
-  state,
-  color,
-  icon,
-  command,
-  description,
-  textColor,
-  variant,
+  // state,
   autoFocus,
-  isVirtualized,
-  withDivider,
-  dividerWeight,
-  showFullDescription,
-  className,
-  onAction,
-}: DropdownItemProps<T>) => {
-  const {onClose, closeOnSelect, disableAnimation, borderWeight} = useDropdownContext();
+}: SelectItemProps<T>) => {
+  const { rendered, key } = item;
 
-  const {rendered, key} = item;
+  const { selection, state } = useDropdownContext();
+  if (!state) {
+    return <p>dfs</p>;
+  }
 
+  // const isSelected = key === selectState.selectedKey;
   const isSelected = state.selectionManager.isSelected(key);
-  const isFocused = state.selectionManager.focusedKey === item.key;
-  const isDisabled = state.disabledKeys.has(key);
+  const isFocused = state.selectionManager.focusedKey === key;
+  const isDisabled = false;
+
+  console.log('is selected', key, isSelected);
 
   const ref = useRef<HTMLLIElement>(null);
 
-  const {pressProps, isPressed} = usePress({
+  const { pressProps, isPressed } = usePress({
     ref,
     isDisabled,
   });
+  const context = useDropdownContext();
 
-  const {isFocusVisible, focusProps}: IFocusRingAria = useFocusRing({
+  if (isPressed) {
+    const ad = new Set<React.Key>().add(key);
+    console.log('ad', ad);
+    // const ad1 = [...state.selectionManager.selectedKeys, key];
+    // console.log('ad1', ad1);
+    // const ad2 = new Set(ad1);
+    if (selection === 'single') {
+      state.selectionManager.setSelectedKeys(ad);
+    }
+    if (selection !== 'multiple') {
+      // state.selectionManager.setSelectedKeys(ad);
+      context.setOpen(false);
+    }
+
+    console.log('all items', state.selectionManager.selectionBehavior);
+
+    // console.log('state selected', context.state.selectionManager.selectedKeys);
+  }
+
+  const { isFocusVisible, focusProps }: IFocusRingAria = useFocusRing({
     autoFocus,
   });
 
-  const {hoverProps, isHovered} = useHover({isDisabled});
-
-  const isSelectable = state.selectionManager.selectionMode !== "none" && !isDisabled;
-
-  const {menuItemProps, labelProps, descriptionProps, keyboardShortcutProps}: IMenuItemAria =
-    useMenuItem(
-      {
-        key,
-        onClose,
-        isSelected,
-        isDisabled,
-        "aria-label": item["aria-label"],
-        closeOnSelect,
-        isVirtualized,
-        onAction,
-      },
-      state,
-      ref,
-    );
-
-  const getState = useMemo(() => {
-    if (isHovered) return "hovered";
-    if (isSelected) return "selected";
-    if (isPressed) return "pressed";
-
-    return isDisabled ? "disabled" : "ready";
-  }, [isSelected, isDisabled, isHovered, isPressed]);
-
-  const getTextColor = useMemo(() => {
-    if (item.props.textColor) {
-      return item.props.textColor;
-    }
-    if (item.props.color && textColor === "default") {
-      return item.props.color;
-    }
-
-    return textColor;
-  }, [textColor, item.props.color, item.props.textColor]);
-
-  const withDescription = useMemo(
-    () => description || item.props.description,
-    [description, item.props.description],
+  const { optionProps, labelProps }: IOptionAria = useOption(
+    {
+      key,
+      'aria-label': item['aria-label'],
+      isDisabled,
+      isSelected,
+      shouldSelectOnPressUp: false,
+      shouldFocusOnHover: true,
+    },
+    state,
+    ref
   );
 
-  const withCommand = useMemo(() => command || item.props.command, [command, item.props.command]);
+  const { hoverProps, isHovered } = useHover({ isDisabled });
+  // console.log('hover', key, isHovered);
 
-  const withIcon = useMemo(() => icon || item.props.icon, [icon, item.props.icon]);
+  const isSelectable = state.selectionManager.selectionMode !== 'none' && !isDisabled;
+  // const isSelectable = false;
+  const getState = useMemo(() => {
+    if (isHovered) return 'hovered';
+    if (isSelected) return 'selected';
+    if (isPressed) return 'pressed';
+
+    return isDisabled ? 'disabled' : 'ready';
+  }, [isSelected, isDisabled, isHovered, isPressed]);
 
   return (
     <StyledDropdownItem
       ref={ref}
-      {...mergeProps(menuItemProps, hoverProps, pressProps, focusProps)}
+      hovered={isHovered}
+      {...mergeProps(optionProps, hoverProps, pressProps, focusProps)}
       as={item.props.as || as}
-      className={clsx(
-        "nextui-dropdown-item",
-        {
-          "is-disabled": isDisabled,
-          "is-selected": isSelected,
-          "is-selectable": isSelectable,
-          "is-hovered": isHovered,
-          "is-focused": isFocused,
-          "is-pressed": isPressed,
-        },
-        className,
-        item.props.className,
-      )}
-      color={item.props.color || color}
-      css={{...mergeProps(css, item.props.css)}}
+      // color={item.props.color || color}
+      css={{ ...mergeProps(css, item.props.css) }}
       data-state={getState}
-      disableAnimation={disableAnimation}
-      dividerWeight={dividerWeight || item.props.dividerWeight || borderWeight}
-      isDisabled={isDisabled}
-      isFocusVisible={isFocusVisible}
-      isFocused={isFocused}
-      isHovered={isHovered}
-      isPressed={isPressed}
-      isSelectable={isSelectable}
-      isSelected={isSelected}
-      shouldShowOutline={isFocusVisible && variant === "shadow"}
-      showFullDescription={showFullDescription || item.props.showFullDescription}
-      textColor={getTextColor}
-      variant={item.props.variant || variant}
-      withDescription={!!withDescription}
-      withDivider={withDivider || item.props.withDivider}
+      // isDisabled={isDisabled}
+      // isFocusVisible={isFocusVisible}
+      // isFocused={isFocused}
     >
-      {withIcon && (
-        <StyledDropdownItemIconWrapper className="nextui-dropdown-item-icon-wrapper">
-          {withIcon}
-        </StyledDropdownItemIconWrapper>
-      )}
-      {withDescription ? (
-        <StyledDropdownItemContentWrapper>
-          <StyledDropdownItemContent className="nextui-dropdown-item-content" {...labelProps}>
-            {rendered}
-          </StyledDropdownItemContent>
-          <StyledDropdownItemDescription
-            className="nextui-dropdown-item-description"
-            hasCommand={!!withCommand}
-            hasIcon={!!withIcon}
-            {...descriptionProps}
+      <StyledDropdownItemContent className="potionui-Dropdown-item-content" {...labelProps}>
+        {selection !== 'none' && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'left',
+              gap: '9px',
+              width: '100%',
+              alignContent: 'center',
+              alignItems: 'center',
+            }}
           >
-            {withDescription}
-          </StyledDropdownItemDescription>
-        </StyledDropdownItemContentWrapper>
-      ) : (
-        <StyledDropdownItemContent className="nextui-dropdown-item-content" {...labelProps}>
-          {rendered}
-        </StyledDropdownItemContent>
-      )}
-
-      {withCommand && (
-        <StyledDropdownItemKbd className="nextui-dropdown-item-command" {...keyboardShortcutProps}>
-          {withCommand}
-        </StyledDropdownItemKbd>
-      )}
-      {isSelected && (
-        <Checkmark
-          css={{
-            ml: "$4",
-          }}
-        />
-      )}
+            <CheckBox
+              status={isSelected ? 'selected' : selection === 'multiple' ? 'unselected' : 'plain'}
+            />
+            {rendered}
+          </div>
+        )}
+        {selection === 'none' && <>{rendered}</>}
+      </StyledDropdownItemContent>
     </StyledDropdownItem>
   );
 };
 
 if (__DEV__) {
-  DropdownItem.displayName = "NextUI.DropdownItem";
+  DropdownItem.displayName = 'PotionUI.DropdownItem';
 }
-DropdownItem.toString = () => ".nextui-dropdown-item";
+DropdownItem.toString = () => '.potionUI-Dropdown-item';
 
 export default DropdownItem;

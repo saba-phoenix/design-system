@@ -1,14 +1,13 @@
-import type { ReactRef } from '../utils/refs';
-
 import React from 'react';
 
 import * as Popover from '@radix-ui/react-popover';
-import { CSS } from '../../stitches.config';
-import { __DEV__ } from '../utils/assertion';
 
-import { useSelectContext } from './select-context';
-import { Demo } from '../Demo';
+import { CSS } from '../../stitches.config';
+import { SelectButton } from './select-button';
+import { __DEV__ } from '../utils/assertion';
 import { useDOMRef } from '../utils/dom';
+import type { ReactRef } from '../utils/refs';
+import { useSelectContext } from './select-context';
 
 export interface SelectTriggerProps {
   children?: React.ReactNode;
@@ -21,13 +20,12 @@ export interface SelectTriggerProps {
  */
 const SelectTrigger = React.forwardRef(
   (props: SelectTriggerProps, ref: ReactRef<HTMLButtonElement>) => {
-    const { children, css, ...otherProps } = props;
-    const { state, listBoxProps } = useSelectContext();
-    // const buttonRef = useDOMRef(ref);
-    // saba: i deleted the triggerprops here. will anything change?
+    const { state, isOpen } = useSelectContext();
+    const buttonRef = useDOMRef(ref);
+
     return (
       <Popover.Trigger asChild>
-        <Demo isOpen={true} title={'hello'} ref={ref} />
+        <SelectButton isOpen={isOpen} ref={buttonRef} />
       </Popover.Trigger>
     );
   }
@@ -39,7 +37,7 @@ if (__DEV__) {
 
 SelectTrigger.toString = () => '.potionui-select-trigger';
 
-type SelectTriggerComponent<T, P = {}> = React.ForwardRefExoticComponent<
+type SelectTriggerComponent<T, P = Record<string, unknown>> = React.ForwardRefExoticComponent<
   React.PropsWithoutRef<P> & React.RefAttributes<T>
 >;
 

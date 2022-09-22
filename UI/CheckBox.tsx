@@ -25,9 +25,16 @@ export const StyledCheckBox = styled('div', {
       },
       plain: {
         background: 'transparent',
+        // height: '0px',
+        // width: '0px',
       },
       unselected: {
         border: '1px solid #ABABAB',
+      },
+      none: {
+        background: 'transparent',
+        height: '0px',
+        width: '0px',
       },
     },
   },

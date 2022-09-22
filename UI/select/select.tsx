@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useRef } from 'react';
 import { Section } from '@react-stately/collections';
 
 // import { Popover } from '@nextui-org/react';
@@ -17,44 +17,72 @@ interface Props extends UseSelectProps {
    * The content of the select. It is usually the `Select.Trigger`,
    * and `Select.Menu`
    */
-  type: 'single' | 'multi';
+  // type: 'single' | 'multi';
   children: CollectionChildren<any>;
 }
 
 export type SelectProps = Props;
 
 const Select = (props: SelectProps) => {
-  const { children, type = 'multi', ...otherProps } = props;
-  const context = useSelect(props);
+  const { children, selectionMode, ...otherProps } = props;
+  // const context = useSelect(props);
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  // saba: i deleted context.popover props from popover.root
 
   return (
-    <SelectProvider value={context}>
-      <Popover.Root {...context.popoverProps} open={context.state.isOpen}>
-        <SelectTrigger />
-        <Popover.Portal>
-          <Popover.Content
-            side="bottom"
-            sideOffset={4}
-            onPointerDownOutside={(e) => {
-              context.state.setOpen(false);
-            }}
-            onClick={(e) => {
-              if (type === 'single') {
-                context.state.setOpen(false);
-              }
-            }}
-          >
-            <SelectMenu aria-label="select-menu">{children}</SelectMenu>
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
-    </SelectProvider>
+    <p>fg</p>
+    // <SelectProvider value={context}>
+    //   <Popover.Root open={context.isOpen} onOpenChange={(open) => {}} modal={false}>
+    //     <SelectTrigger />
+    //     <Popover.Portal>
+    //       <Popover.Content
+    //         {...context.listBoxProps}
+    //         side="bottom"
+    //         sideOffset={4}
+    //         onPointerDownOutside={(e) => {
+    //           context.setOpen(false);
+    //         }}
+    //         onClick={(e) => {
+    //           if (selectionMode === 'single') {
+    //             context.setOpen(false);
+    //           }
+    //         }}
+    //         ref={(context.ref as any) as React.Ref<HTMLDivElement>}
+    //         asChild
+    //       >
+    //         <SelectMenu aria-label="select-menu" ref={context.ref}>
+    //           {children}
+    //         </SelectMenu>
+    //       </Popover.Content>
+    //     </Popover.Portal>
+    //   </Popover.Root>
+    //   //{' '}
+    // </SelectProvider>
+    // <Popover.Root open={true} onOpenChange={(open) => {}} modal={false}>
+    //   <SelectTrigger ref={btnRef} />
+    //   <Popover.Portal>
+    //     <Popover.Content
+    //       // {...context.listBoxProps}
+    //       side="bottom"
+    //       sideOffset={4}
+    //       onPointerDownOutside={(e) => {}}
+    //       onClick={(e) => {
+    //         if (selectionMode === 'single') {
+    //         }
+    //       }}
+    //       asChild
+    //     >
+    //       <SelectMenu aria-label="select-menu">{children}</SelectMenu>
+    //     </Popover.Content>
+    //   </Popover.Portal>
+    // </Popover.Root>
   );
 };
 
-if (__DEV__) {
-  Select.displayName = 'PotionUI.Select';
-}
+// if (__DEV__) {
+//   Select.displayName = 'PotionUI.Select';
+// }
 
 type SelectComponent<P = {}> = React.FC<P> & {
   Trigger: typeof SelectTrigger;

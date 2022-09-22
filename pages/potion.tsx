@@ -5,10 +5,14 @@ import { Box } from '../components/Box';
 import { Flex } from '../components/Flex';
 import { Grid } from '../components/Grid';
 import { Badge } from '../UI/Badge';
-import Select from '../UI/select/index';
+import Modal from '../UI/Modal';
+// import Select from '../UI/select/index';
+import Select from '../UI/select2/index';
+import Dropdown from '../UI/dropdown/index';
 import { Switch } from '../components/Switch';
 import { ControlGroup } from '../components/ControlGroup';
 import { Text } from '../UI/Text';
+import { Demo } from '../UI/Demo';
 import { Input } from '../UI/Input';
 import { SelectDemo } from '../UI/Select';
 import { Button } from '../UI/Button';
@@ -124,7 +128,7 @@ function Potion() {
       <AppBar size="2" color="loContrast" border sticky glass>
         <Button variant="minimal">Button</Button>
       </AppBar>
-      <Box
+      {/* <Box
         css={{
           position: 'fixed',
           top: '$7',
@@ -169,7 +173,7 @@ function Potion() {
             </Link>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
 
       <Box css={{ bc: '$loContrast', height: '100%' }}>
         <Section size="3">
@@ -359,8 +363,8 @@ function Potion() {
             <br></br>
             <br></br>
             <Flex direction="row" css={{ gap: '100px' }}>
-              <Select type={'single'}>
-                <Select.Item> Placeholder 1 </Select.Item>
+              {/* <Select type="single">
+                <Select.Item key="saba"> Sabaaa</Select.Item>
                 <Select.Item> Placeholder 2 </Select.Item>
                 <Select.Item> Placeholder 3 </Select.Item>
                 <Select.Item> Placeholder 4 </Select.Item>
@@ -370,8 +374,20 @@ function Potion() {
                 <Select.Item> Placeholder 2 </Select.Item>
                 <Select.Item> Placeholder 3 </Select.Item>
                 <Select.Item> Placeholder 4 </Select.Item>
-              </Select>
+              </Select> */}
             </Flex>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            {/* <Input placeholder="Enter input" status="Status" /> */}
+            <br></br>
+            <br></br>
+            {/* <SelectDemo /> */}
+            <br></br>
+            <br></br>
+
+            <br></br>
             <br></br>
             <br></br>
             <br></br>
@@ -379,18 +395,195 @@ function Potion() {
 
             <br></br>
             <br></br>
+            <br></br>
+
+            <br></br>
+          </Container>
+        </Section>
+
+        <Section size="3">
+          <Container size="2">
+            <Heading id="dropdown" css={{ mb: '$6', scrollMarginTop: '$7' }}>
+              Dropdown
+            </Heading>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <Flex direction="row" css={{ gap: '70px' }}>
+              <Dropdown
+                selection="single"
+                options={[
+                  { key: 'placeholder 1', name: 'placeholder 1' },
+                  { key: 'placeholder 2', name: 'placeholder 2' },
+                  { key: 'placeholder 3', name: 'placeholder 3' },
+                  { key: 'placeholder 4', name: 'placeholder 4' },
+                ]}
+              >
+                <Dropdown.Trigger>
+                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                  <Button variant="primaryPlusIcon">Single Select</Button>
+                </Dropdown.Trigger>
+              </Dropdown>
+
+              <Dropdown
+                selection="multiple"
+                options={[
+                  { key: 'placeholder 1', name: 'placeholder 1' },
+                  { key: 'placeholder 2', name: 'placeholder 2' },
+                  { key: 'placeholder 3', name: 'placeholder 3' },
+                  { key: 'placeholder 4', name: 'placeholder 4' },
+                ]}
+              >
+                <Dropdown.Trigger>
+                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                  <Button variant="secondaryPlusIcon">Multi Select</Button>
+                </Dropdown.Trigger>
+              </Dropdown>
+              <Dropdown
+                selection="none"
+                options={[
+                  { key: 'placeholder 1', name: 'placeholder 1' },
+                  { key: 'placeholder 2', name: 'placeholder 2' },
+                  { key: 'placeholder 3', name: 'placeholder 3' },
+                  { key: 'placeholder 4', name: 'placeholder 4' },
+                ]}
+              >
+                <Dropdown.Trigger>
+                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                  <Button variant="primaryPlusIcon">Menu</Button>
+                </Dropdown.Trigger>
+              </Dropdown>
+
+              <Dropdown
+                selection="multiple"
+                title={'Title goes here'}
+                options={[
+                  { key: 'placeholder 1', name: 'placeholder 1' },
+                  { key: 'placeholder 2', name: 'placeholder 2' },
+                  { key: 'placeholder 3', name: 'placeholder 3' },
+                  { key: 'placeholder 4', name: 'placeholder 4' },
+                ]}
+              >
+                <Dropdown.Trigger>
+                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                  <Button variant="secondaryPlusIcon">Title</Button>
+                </Dropdown.Trigger>
+              </Dropdown>
+              <Dropdown
+                selection="multiple"
+                title={'Title goes here'}
+                isReset={true}
+                options={[
+                  { key: 'placeholder 1', name: 'placeholder 1' },
+                  { key: 'placeholder 2', name: 'placeholder 2' },
+                  { key: 'placeholder 3', name: 'placeholder 3' },
+                  { key: 'placeholder 4', name: 'placeholder 4' },
+                ]}
+              >
+                <Dropdown.Trigger>
+                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                  <Button variant="secondaryPlusIcon">Title and reset</Button>
+                </Dropdown.Trigger>
+              </Dropdown>
+              <Dropdown
+                selection="multiple"
+                search={true}
+                options={[
+                  { key: 'placeholder 1', name: 'placeholder 1' },
+                  { key: 'placeholder 2', name: 'placeholder 2' },
+                  { key: 'placeholder 3', name: 'placeholder 3' },
+                  { key: 'placeholder 4', name: 'placeholder 4' },
+                ]}
+              >
+                <Dropdown.Trigger>
+                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                  <Button variant="secondaryPlusIcon">search</Button>
+                </Dropdown.Trigger>
+              </Dropdown>
+            </Flex>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            {/* <Input placeholder="Enter input" status="Status" /> */}
+            <br></br>
+            <br></br>
             {/* <SelectDemo /> */}
             <br></br>
             <br></br>
+
             <br></br>
             <br></br>
             <br></br>
             <br></br>
             <br></br>
+
             <br></br>
             <br></br>
             <br></br>
-            <Input placeholder="Enter input" status="Status" />
+
+            <br></br>
+          </Container>
+        </Section>
+
+        <Section size="3">
+          <Container size="2">
+            <Heading id="modals" css={{ fontSize: '24px', mb: '$6', scrollMarginTop: '$7' }}>
+              Modals
+            </Heading>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <Flex direction="row" css={{ gap: '100px' }}>
+              <Modal
+                title="Title"
+                description="This is a placeholder for the body content to show how this button may work."
+                danger={false}
+              />
+
+              <Modal
+                title="You are about to delete something important"
+                description="This is a placeholder for the body content to show how this button may work."
+                danger={true}
+              />
+              {/* <Select selectionMode={'multiple'} selectionBehavior="toggle">
+                <Select.Item> Placeholder 1 </Select.Item>
+                <Select.Item> Placeholder 2 </Select.Item>
+                <Select.Item> Placeholder 3 </Select.Item>
+                <Select.Item> Placeholder 4 </Select.Item>
+              </Select> */}
+            </Flex>
+
+            {/* <SelectDemo /> */}
+            <br></br>
+            <br></br>
+
+            <br></br>
+            {/* <Input placeholder="Enter input" status="Status" /> */}
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
           </Container>
         </Section>
       </Box>

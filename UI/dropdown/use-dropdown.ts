@@ -1,104 +1,63 @@
-import {useRef, useCallback} from "react";
-import {mergeProps} from "@react-aria/utils";
-import {MenuTriggerType} from "@react-types/menu";
-import {useMenuTrigger} from "@react-aria/menu";
-import {useMenuTriggerState} from "@react-stately/menu";
+import React, { useRef, useState } from 'react';
+import { ListProps, ListState, useListState } from '@react-stately/list';
+import { AriaListBoxProps } from '@react-types/listbox';
+import { CollectionChildren } from '@react-types/shared';
 
-import {mergeRefs} from "../utils/refs";
-import {PopoverProps} from "../popover";
+type PopoverProps = {
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  modal?: boolean;
+  selection: 'single' | 'multiple' | 'none';
+  children: CollectionChildren<any>;
+  ref?: React.RefObject<HTMLUListElement | null>;
+  title?: string;
+  search?: boolean;
+  isReset?: boolean;
+};
 
-export interface UseDropdownProps extends Omit<PopoverProps, "children"> {
-  type?: "menu" | "listbox";
-  /**
-   * Whether menu trigger is disabled.
-   * @default false
-   */
-  isDisabled?: boolean;
-  /**
-   * How the menu is triggered.
-   * @default 'press'
-   */
-  trigger?: MenuTriggerType;
-  /**
-   * Whether the trigger should show a pressed animation when the menu is open.
-   * @default false
-   */
-  disableTriggerPressedAnimation?: boolean;
-  /**
-   * Whether the Menu closes when a selection is made.
-   * @default true
-   */
-  closeOnSelect?: boolean;
-}
+export interface UseDropdownProps extends PopoverProps, AriaListBoxProps<any> {}
 
 /**
  * @internal
  */
-export function useDropdown(props: UseDropdownProps = {}) {
-  const {
-    triggerRef: triggerRefProp,
-    type = "menu",
-    trigger = "press",
-    isDisabled = false,
-    borderWeight,
-    closeOnSelect,
-    disableAnimation = false,
-    disableTriggerPressedAnimation = false,
-    ...popoverProps
-  } = props;
+export function useDropdown(props: UseDropdownProps) {
+  const { ref, selection, isReset = false, search = false, title, ...popoverProps } = props;
 
-  const triggerRef = useRef<HTMLElement>(null);
-  const menuTriggerRef = triggerRefProp || triggerRef;
-  const menuRef = useRef<HTMLUListElement>(null);
-  const menuPopoverRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  // const [state, setState] = useState<ListState<any | null>>();
+  // const [state, setState] = useState<ListProps<any>>(null);
 
-  const state = useMenuTriggerState(props);
+  const state = useListState({
+    ...props,
+    selectionMode:
+      selection === 'multiple' ? 'multiple' : selection === 'single' ? 'single' : 'none',
+    selectionBehavior: selection === 'multiple' ? 'toggle' : 'replace',
+  });
 
-  const {menuTriggerProps, menuProps} = useMenuTrigger(
-    {type, trigger, isDisabled},
-    state,
-    menuTriggerRef,
-  );
+  const reset = () => {
+    state.selectionManager.clearSelection();
+  };
 
-  const getMenuTriggerProps = useCallback(
-    (props = {}, _ref = null) => {
-      const {css, ...realTriggerProps} = triggerRefProp?.current
-        ? mergeProps(menuTriggerProps, props)
-        : mergeProps(props, menuTriggerProps);
-
-      return {
-        ref: mergeRefs(triggerRef, _ref),
-        css: !disableTriggerPressedAnimation
-          ? {
-              '&[aria-haspopup="true"]&[aria-expanded="true"]': {
-                opacity: 0.7,
-                backfaceVisibility: "hidden",
-                transform: "translateZ(0) scale(0.97)",
-              },
-              ...css,
-            }
-          : css,
-        ...realTriggerProps,
-      };
-    },
-    [triggerRef, triggerRefProp, menuTriggerProps, disableTriggerPressedAnimation],
-  );
-
+  // console.log('items', items);
   return {
-    ...menuProps,
-    popoverProps,
+    // selectedKeys: state.selectionManager.selectedKeys,
+    // setSelectedKeys: state.selectionManager.setSelectedKeys,
+    isOpen,
+    setOpen,
+    selection,
+    ref,
     state,
-    ref: menuRef,
-    onClose: state.close,
-    autoFocus: state.focusStrategy || true,
-    disableAnimation,
-    disableTriggerPressedAnimation,
-    menuRef,
-    borderWeight,
-    menuPopoverRef,
-    menuTriggerRef,
-    closeOnSelect,
-    getMenuTriggerProps,
+    reset,
+    search,
+    isReset,
+    title,
+    // setState,
+    // items,
+    popoverProps,
+    // state,
+    // onClose: state.selectionManager.setFocused,
+    // autoFocus: state.selectionManager.isFocused || true,
   };
 }
 

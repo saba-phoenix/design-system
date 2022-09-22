@@ -17,7 +17,7 @@ import { __DEV__ } from '../utils/assertion';
 
 import { useSelectContext } from './select-context';
 import { StyledSelectItem, StyledSelectItemContent } from './select.styles';
-import { CheckBox } from '../Checkbox';
+import { CheckBox } from '../CheckBox';
 
 interface Props<T> extends FocusableProps {
   item: Node<T>;

@@ -1,12 +1,11 @@
 import React from 'react';
-import { useDOMRef } from './utils/dom';
+
 import { useButton } from '@react-aria/button';
-import { useRef } from 'react';
 import { mergeProps } from '@react-aria/utils';
-import { CheckBox } from './CheckBox';
-import { styled, VariantProps } from './../stitches.config';
-import { Flex } from '../components/Flex';
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
+
+import { styled } from '../../stitches.config';
+import { useDOMRef } from '../utils/dom';
 
 export const StyledButton = styled('button', {
   all: 'unset',
@@ -29,7 +28,6 @@ export const StyledButton = styled('button', {
   gap: 5,
   backgroundColor: 'white',
   color: '$textBlack',
-  // '&:focus': { border: '2px solid #0069DA' },
 
   variants: {
     status: {
@@ -49,13 +47,13 @@ export const StyledButton = styled('button', {
   },
 });
 
-export const Demo = React.forwardRef<
+export const SelectButton = React.forwardRef<
   HTMLButtonElement,
   { isOpen: boolean; title: string | undefined }
 >((props, ref) => {
-  console.log('Demo ref', ref);
   const demoRef = useDOMRef(ref);
-  let { buttonProps } = useButton(props, demoRef);
+  const { buttonProps } = useButton(props, demoRef);
+  // eslint-disable-next-line prefer-const
   let { isOpen, title } = props;
   let status;
   if (!title || title == '') {
@@ -63,7 +61,12 @@ export const Demo = React.forwardRef<
     title = 'Select input';
   } else status = 'full';
   return (
-    <StyledButton ref={demoRef} status={status} isOpen={isOpen} {...mergeProps(buttonProps)}>
+    <StyledButton
+      ref={demoRef}
+      status={status}
+      isOpen={isOpen}
+      {...mergeProps(buttonProps)}
+    >
       <div
         style={{
           display: 'flex',

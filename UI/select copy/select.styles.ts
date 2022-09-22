@@ -1,44 +1,14 @@
 import { styled, VariantProps } from '../../stitches.config';
-export const StyledDropdownUnorderedList = styled('ul', {
-  width: '100%',
-  listStyle: 'none',
-  m: 0,
-  p: 0,
-  // $$selectMenuPadding: '1px',
-  // $$selectMenuWidth: '224px',
-  // $$selectMenuMinWidth: '224px',
-
-  // position: 'relative',
-  // maxWidth: '$$selectMenuWidth',
-  // minWidth: '$$selectMenuMinWidth',
-  // $$selectItemHeight: '40px',
-  // $$selectMenuPadding: '1px',
-  // $$selectMenuWidth: '224px',
-  // $$selectMenuMinWidth: '224px',
-  // listStyle: 'none',
-  // position: 'relative',
-  // maxWidth: '$$selectMenuWidth',
-  // minWidth: '$$selectMenuMinWidth',
-  // width: '100%',
-  // py: '4px',
-  // px: '4px',
-  // m: 0,
-  // outline: 'none',
-  // backgroundColor: '$white',
-  // borderRadius: '4px',
-  // boxShadow: '0px 0px 12px 4px rgba(0, 0, 0, 0.06)',
-});
-
-export const StyledDropdownMenu = styled('div', {
+export const StyledSelectMenu = styled('ul', {
   $$selectItemHeight: '40px',
   $$selectMenuPadding: '1px',
   $$selectMenuWidth: '224px',
   $$selectMenuMinWidth: '224px',
-
+  listStyle: 'none',
   position: 'relative',
   maxWidth: '$$selectMenuWidth',
   minWidth: '$$selectMenuMinWidth',
-  width: '216px',
+  width: '100%',
   py: '4px',
   px: '4px',
   m: 0,
@@ -46,16 +16,14 @@ export const StyledDropdownMenu = styled('div', {
   backgroundColor: '$white',
   borderRadius: '4px',
   boxShadow: '0px 0px 12px 4px rgba(0, 0, 0, 0.06)',
-  // display: 'flex',
-  // direction: 'column',
 });
 
-export const StyledDropdownItemIconWrapper = styled('span', {
+export const StyledSelectItemIconWrapper = styled('span', {
   dflex: 'center',
   flexShrink: 0,
 });
 
-export const StyledDropdownItemContentWrapper = styled('div', {
+export const StyledSelectItemContentWrapper = styled('div', {
   d: 'flex',
   flex: '1 1 0%',
   flexDirection: 'column',
@@ -63,11 +31,11 @@ export const StyledDropdownItemContentWrapper = styled('div', {
   lineHeight: 1.2,
 });
 
-export const StyledDropdownItemContent = styled('span', {
+export const StyledSelectItemContent = styled('span', {
   flex: '1 1 0%',
 });
 
-export const StyledDropdownItem = styled('li', {
+export const StyledSelectItem = styled('li', {
   $$selectItemPressedScale: 0.97,
   $$selectItemBorderRadius: '$radii$default',
   display: 'flex',
@@ -102,8 +70,8 @@ export const StyledDropdownItem = styled('li', {
   },
 });
 
-export const StyledDropdownSectionWrapper = styled('li', {
+export const StyledSelectSectionWrapper = styled('li', {
   mb: 0,
 });
 
-export type SelectItemVariantsProps = VariantProps<typeof StyledDropdownItem>;
+export type SelectItemVariantsProps = VariantProps<typeof StyledSelectItem>;

@@ -1,21 +1,21 @@
-import type { FocusableProps } from '@react-types/shared';
-import type { IFocusRingAria, IOptionAria } from './select-types';
-
 import React, { ReactNode, Key, useRef, useMemo } from 'react';
-import { Node } from '@react-types/shared';
-import { mergeProps } from '@react-aria/utils';
-import { TreeState } from '@react-stately/tree';
+
 import { useFocusRing } from '@react-aria/focus';
 import { useHover, usePress } from '@react-aria/interactions';
 import { useOption } from '@react-aria/listbox';
+import { mergeProps } from '@react-aria/utils';
+import { TreeState } from '@react-stately/tree';
+import { ListState } from '@react-stately/list';
+import { Node } from '@react-types/shared';
+import type { FocusableProps } from '@react-types/shared';
 
 import { CSS } from '../../stitches.config';
-import { __DEV__ } from '../utils/assertion';
-
-import { useSelectContext } from './select-context';
-import { StyledSelectItem, StyledSelectItemContent } from './select.styles';
 import { CheckBox } from '../CheckBox';
-import { ListState } from '@react-stately/list';
+import { __DEV__ } from '../utils/assertion';
+import { useSelectContext } from './select-context';
+import type { IFocusRingAria, IOptionAria } from './select-types';
+import { StyledSelectItem, StyledSelectItemContent } from './select.styles';
+import { ContextMenu } from '@radix-ui/react-context-menu';
 
 interface Props<T> extends FocusableProps {
   item: Node<T>;
@@ -34,25 +34,16 @@ type NativeAttrs = Omit<React.HTMLAttributes<unknown>, keyof Props<object>>;
 
 export type SelectItemProps<T = object> = Props<T> & NativeAttrs & { css?: CSS };
 
-const SelectItem = <T extends object>({
-  as,
-  css,
-  item,
-  state,
-  color,
-
-  autoFocus,
-  className,
-  onAction,
-}: SelectItemProps<T>) => {
+const SelectItem = <T extends object>({ as, css, item, state, autoFocus }: SelectItemProps<T>) => {
   const { rendered, key } = item;
 
-  // saba: differenciate between state and selectedState
+  const { type } = useSelectContext();
+  // const isSelected = key === selectState.selectedKey;
+  const isSelected = state.selectionManager.isSelected(key);
+  const isFocused = state.selectionManager.focusedKey === key;
+  const isDisabled = false;
 
-  const { state: selectState, selectionMode } = useSelectContext();
-  const isSelected = selectState.selectionManager.selectedKeys.has(key);
-  const isFocused = state.selectionManager.focusedKey === item.key;
-  const isDisabled = state.disabledKeys.has(key);
+  console.log('is selected', key, isSelected);
 
   const ref = useRef<HTMLLIElement>(null);
 
@@ -60,9 +51,22 @@ const SelectItem = <T extends object>({
     ref,
     isDisabled,
   });
+  const context = useSelectContext();
 
   if (isPressed) {
-    selectState.selectionManager.selectedKeys.add(key);
+    const ad = new Set<React.Key>().add(key);
+    console.log('ad', ad);
+    const ad1 = [...context.state.selectionManager.selectedKeys, key];
+    console.log('ad1', ad1);
+    const ad2 = new Set(ad1);
+    if (type === 'single') {
+      context.state.selectionManager.setSelectedKeys(ad);
+      context.setOpen(false);
+    }
+
+    console.log('all items', context.state.selectionManager.selectionBehavior);
+
+    // console.log('state selected', context.state.selectionManager.selectedKeys);
   }
 
   const { isFocusVisible, focusProps }: IFocusRingAria = useFocusRing({
@@ -78,13 +82,15 @@ const SelectItem = <T extends object>({
       shouldSelectOnPressUp: false,
       shouldFocusOnHover: true,
     },
-    selectState,
+    state,
     ref
   );
 
   const { hoverProps, isHovered } = useHover({ isDisabled });
+  // console.log('hover', key, isHovered);
 
   const isSelectable = state.selectionManager.selectionMode !== 'none' && !isDisabled;
+  // const isSelectable = false;
   const getState = useMemo(() => {
     if (isHovered) return 'hovered';
     if (isSelected) return 'selected';
@@ -99,16 +105,12 @@ const SelectItem = <T extends object>({
       hovered={isHovered}
       {...mergeProps(optionProps, hoverProps, pressProps, focusProps)}
       as={item.props.as || as}
-      color={item.props.color || color}
+      // color={item.props.color || color}
       css={{ ...mergeProps(css, item.props.css) }}
       data-state={getState}
-      isDisabled={isDisabled}
-      isFocusVisible={isFocusVisible}
+      // isDisabled={isDisabled}
+      // isFocusVisible={isFocusVisible}
       isFocused={isFocused}
-      isHovered={isHovered}
-      isPressed={isPressed}
-      isSelectable={isSelectable}
-      isSelected={isSelected}
     >
       <StyledSelectItemContent className="potionui-select-item-content" {...labelProps}>
         <div
@@ -122,9 +124,7 @@ const SelectItem = <T extends object>({
             alignItems: 'center',
           }}
         >
-          <CheckBox
-            status={isSelected ? 'selected' : selectionMode === 'single' ? 'plain' : 'unselected'}
-          />
+          <CheckBox status={isSelected ? 'selected' : type === 'single' ? 'plain' : 'unselected'} />
           {rendered}
         </div>
       </StyledSelectItemContent>

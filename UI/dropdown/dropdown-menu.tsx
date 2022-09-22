@@ -1,120 +1,126 @@
-import type {SimpleColors, DropdownVariants} from "../utils/prop-types";
+import React, { RefAttributes, PropsWithoutRef } from 'react';
 
-import React, {RefAttributes, PropsWithoutRef} from "react";
-import {DOMProps, AriaLabelingProps} from "@react-types/shared";
-import {AriaMenuProps} from "@react-types/menu";
-import {useMenu} from "@react-aria/menu";
-import {useTreeState} from "@react-stately/tree";
-import {mergeProps} from "@react-aria/utils";
+import { useListBox } from '@react-aria/listbox';
+import { mergeProps } from '@react-aria/utils';
+import { useTreeState } from '@react-stately/tree';
+import { AriaListBoxProps } from '@react-types/listbox';
+import { DOMProps, AriaLabelingProps } from '@react-types/shared';
 
-import {useDOMRef, useSyncRef} from "../utils/dom";
-import {CSS} from "../theme/stitches.config";
-import clsx from "../utils/clsx";
-import {__DEV__} from "../utils/assertion";
+import { CSS } from '../../stitches.config';
+import { __DEV__ } from '../utils/assertion';
+import { useDOMRef, useSyncRef } from '../utils/dom';
+import { useDropdownContext } from './dropdown-context';
+import DropdownItem from './dropdown-item';
+import { StyledDropdownMenu, StyledDropdownUnorderedList } from './dropdown.styles';
+import { ListProps, useListState } from '@react-stately/list';
+import { Flex } from '../../components/Flex';
+import { Text } from '../Text';
+import { Button } from '../Button';
+import { DropdownSearch } from './dropdown-search';
 
-import {useDropdownContext} from "./dropdown-context";
-import DropdownSection from "./dropdown-section";
-import DropdownItem from "./dropdown-item";
-import {StyledDropdownMenu} from "./dropdown.styles";
-
-interface Props<T> extends AriaMenuProps<T>, DOMProps, AriaLabelingProps {
+interface Props<T> extends AriaListBoxProps<T>, DOMProps, AriaLabelingProps {
   as?: keyof JSX.IntrinsicElements;
-  /**
-   * The color of the dropdown items on (focused, hovered)
-   * @default 'default'
-   */
-  color?: SimpleColors;
-  /**
-   * The dropdowm item variation
-   * @default 'flat'
-   */
-  variant?: DropdownVariants;
-  /**
-   * The text color of the dropdown items on (focused, hovered)
-   * @default 'default'
-   */
-  textColor?: SimpleColors;
 }
 
 type NativeAttrs = Omit<React.HTMLAttributes<unknown>, keyof Props<object>>;
 
-export type DropdownMenuProps<T = object> = Props<T> & NativeAttrs & {css?: CSS};
+export type SelectMenuProps<T = object> = Omit<Props<T> & NativeAttrs & { css?: CSS }, 'children'>;
 
-const DropdownMenu = React.forwardRef(
-  (props: DropdownMenuProps, ref: React.Ref<HTMLUListElement | null>) => {
-    const {
-      css = {},
-      as,
-      color = "default",
-      textColor = "default",
-      variant = "flat",
-      ...otherProps
-    } = props;
+const DropdownMenu = (props: SelectMenuProps) => {
+  const { css = {}, as, color = 'default', ...otherProps } = props;
 
-    const context = useDropdownContext();
-    const completeProps = {
-      ...mergeProps(context, otherProps),
-    };
-    const domRef = useDOMRef(ref);
+  const context = useDropdownContext();
+  const { selection, state, reset, search, isReset, title } = context;
+  const completeProps = {
+    ...mergeProps(context, otherProps),
+  };
 
-    const state = useTreeState(completeProps);
-    const {menuProps} = useMenu(completeProps, state, domRef);
+  const width = selection === 'multiple' ? '216px' : selection === 'single' ? '130px' : '114px';
 
-    useSyncRef(context, domRef);
+  const domRef = useDOMRef(context.ref);
 
-    return (
-      <StyledDropdownMenu
-        ref={domRef}
-        as={as}
-        className={clsx("nextui-dropdown-menu", props.className)}
-        css={{...(css as any)}}
-        {...menuProps}
-      >
-        {[...state.collection].map((item) => {
-          if (item.type === "section") {
-            return (
-              <DropdownSection
-                key={item.key}
-                color={color}
-                item={item}
-                state={state}
-                textColor={textColor}
-                variant={variant}
-                onAction={completeProps.onAction}
-              />
-            );
-          }
-          let dropdownItem = (
-            <DropdownItem
-              key={item.key}
-              color={color}
-              item={item}
-              state={state}
-              textColor={textColor}
-              variant={variant}
-              onAction={completeProps.onAction}
-            />
-          );
+  const items = Object.fromEntries(
+    [...state.collection].map((item) => {
+      return [item.key, item.props.children];
+    })
+  );
 
-          if (item.wrapper) {
-            dropdownItem = item.wrapper(dropdownItem);
-          }
+  const { listBoxProps } = useListBox(completeProps, state, domRef);
 
-          return dropdownItem;
-        })}
-      </StyledDropdownMenu>
-    );
-  },
-);
+  // saba: need to fix padding
+  return (
+    <StyledDropdownMenu
+      css={{
+        width: `${width} !important`,
+        maxWidth: `${width} !important`,
+        minWidth: `${width} !important`,
+      }}
+    >
+      <Flex direction="column" gap="0px">
+        {search && <DropdownSearch />}
 
+        {(isReset || !!title) && (
+          <Flex
+            direction="row"
+            justify="between"
+            css={{
+              paddingBlock: '8px',
+              paddingInline: '8px',
+            }}
+          >
+            {title && (
+              <Text variant="rabbit" color="$textGray">
+                {title}
+              </Text>
+            )}
+            {isReset && (
+              <Button
+                variant="noStyle"
+                css={{
+                  maxHeight: 'min-content',
+                  alignItems: 'flex-start',
+                  alignContent: 'flex-start',
+                }}
+                onClick={() => {
+                  console.log('Hello saba');
+                  reset();
+                }}
+              >
+                <Text variant="rabbit" color="$primaryBlue">
+                  Reset
+                </Text>
+              </Button>
+            )}
+          </Flex>
+        )}
+        <StyledDropdownUnorderedList
+          ref={domRef}
+          as={as}
+          css={{ ...(css as any) }}
+          {...listBoxProps}
+        >
+          {[...state.collection].map((item) => {
+            let selectItem = <DropdownItem key={item.key} color={color} item={item} />;
+
+            if (item.wrapper) {
+              selectItem = item.wrapper(selectItem);
+            }
+
+            return selectItem;
+          })}
+        </StyledDropdownUnorderedList>
+      </Flex>
+    </StyledDropdownMenu>
+  );
+};
 if (__DEV__) {
-  DropdownMenu.displayName = "NextUI.DropdownMenu";
+  DropdownMenu.displayName = 'PotionUI.DropdownMenu';
 }
 
-type DropdownComponent<T, P = {}> = React.ForwardRefExoticComponent<
+type DropdownComponent<T, P = Record<string, unknown>> = React.ForwardRefExoticComponent<
   PropsWithoutRef<P> & RefAttributes<T>
 >;
 
-DropdownMenu.toString = () => ".nextui-dropdown-menu";
+DropdownMenu.toString = () => '.potionui-Dropdown-menu';
 
-export default DropdownMenu as DropdownComponent<HTMLUListElement, DropdownMenuProps>;
+export default DropdownMenu as DropdownComponent<HTMLUListElement, SelectMenuProps>;

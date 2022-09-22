@@ -19,7 +19,7 @@ interface Props extends UseSelectProps {
    * The content of the select. It is usually the `Select.Trigger`,
    * and `Select.Menu`
    */
-  children: CollectionChildren<any>;
+  // children: CollectionChildren<any>;
 }
 
 export type SelectProps = Props;
@@ -50,7 +50,7 @@ type SelectComponent<P = {}> = React.FC<P> & {
   Trigger: typeof SelectTrigger;
   Button: typeof SelectButton;
   Menu: typeof SelectMenu;
-  Item: typeof SelectItemBase;
+  // Item: typeof SelectItemBase;
   Section: typeof Section;
 };
 

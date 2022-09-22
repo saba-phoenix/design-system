@@ -1,39 +1,46 @@
-import type {ReactRef} from "../utils/refs";
+import React, { useRef } from 'react';
 
-import React from "react";
+import * as Popover from '@radix-ui/react-popover';
 
-import Popover from "../popover";
-import {CSS} from "../theme";
-import {__DEV__} from "../utils/assertion";
+import { CSS } from '../../stitches.config';
+import { __DEV__ } from '../utils/assertion';
+import { useDOMRef } from '../utils/dom';
+import type { ReactRef } from '../utils/refs';
+import { useDropdownContext } from './dropdown-context';
 
-import {useDropdownContext} from "./dropdown-context";
-
-export interface DropdownTriggerProps {
+export interface SelectTriggerProps {
   children?: React.ReactNode;
   css?: CSS;
 }
 
 /**
- * DropdownTrigger opens the popover's content. It must be an interactive element
+ * SelectTrigger opens the popover's content. It must be an interactive element
  * such as `button` or `a`.
  */
 const DropdownTrigger = React.forwardRef(
-  (props: DropdownTriggerProps, _: ReactRef<HTMLElement>) => {
-    const {children, ...otherProps} = props;
-    const {getMenuTriggerProps} = useDropdownContext();
+  (props: SelectTriggerProps, ref: ReactRef<HTMLButtonElement>) => {
+    const { children } = props;
+    const { isOpen } = useDropdownContext();
+    const gg = useRef<HTMLButtonElement>(null);
+    const buttonRef = useDOMRef(gg);
+    console.log('inside button');
 
-    return <Popover.Trigger {...getMenuTriggerProps(otherProps)}>{children}</Popover.Trigger>;
-  },
+    return (
+      <Popover.Trigger asChild ref={buttonRef}>
+        {children}
+      </Popover.Trigger>
+    );
+  }
 );
 
 if (__DEV__) {
-  DropdownTrigger.displayName = "NextUI.DropdownTrigger";
+  DropdownTrigger.displayName = 'PotionUI.DropdownTrigger';
 }
 
-DropdownTrigger.toString = () => ".nextui-dropdown-trigger";
+DropdownTrigger.toString = () => '.potionui-Dropdown-trigger';
 
-type DropdownTriggerComponent<T, P = {}> = React.ForwardRefExoticComponent<
+type DropdownTriggerComponent<T, P = Record<string, unknown>> = React.ForwardRefExoticComponent<
   React.PropsWithoutRef<P> & React.RefAttributes<T>
 >;
 
-export default DropdownTrigger as DropdownTriggerComponent<HTMLElement, DropdownTriggerProps>;
+export default DropdownTrigger as DropdownTriggerComponent<HTMLElement, SelectTriggerProps>;
