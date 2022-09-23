@@ -1,4 +1,4 @@
-import React, { RefAttributes, PropsWithoutRef } from 'react';
+import React, { RefAttributes, PropsWithoutRef, useState } from 'react';
 
 import { useListBox } from '@react-aria/listbox';
 import { mergeProps } from '@react-aria/utils';
@@ -18,6 +18,17 @@ import { Text } from '../Text';
 import { Button } from '../Button';
 import { DropdownSearch } from './dropdown-search';
 
+import {
+  DndContext,
+  MouseSensor,
+  UniqueIdentifier,
+  useDndMonitor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { SortableContext, arrayMove as reorderItems, NewIndexGetter } from '@dnd-kit/sortable';
+import { SItem } from './SItem';
+
 interface Props<T> extends AriaListBoxProps<T>, DOMProps, AriaLabelingProps {
   as?: keyof JSX.IntrinsicElements;
 }
@@ -30,7 +41,19 @@ const DropdownMenu = (props: SelectMenuProps) => {
   const { css = {}, as, color = 'default', ...otherProps } = props;
 
   const context = useDropdownContext();
-  const { selection, state, reset, search, isReset, title } = context;
+  const {
+    selection,
+    search,
+    isReset,
+    title,
+    searchFunc,
+    items,
+    setItems,
+    collections,
+    selectedKeys,
+    setSelectedKeys,
+  } = context;
+
   const completeProps = {
     ...mergeProps(context, otherProps),
   };
@@ -39,14 +62,45 @@ const DropdownMenu = (props: SelectMenuProps) => {
 
   const domRef = useDOMRef(context.ref);
 
-  const items = Object.fromEntries(
-    [...state.collection].map((item) => {
-      return [item.key, item.props.children];
+  const state = useListState({
+    ...props,
+    children: collections,
+    selectionMode:
+      selection === 'multiple' ? 'multiple' : selection === 'single' ? 'single' : 'none',
+    selectionBehavior: selection === 'multiple' ? 'toggle' : 'replace',
+    selectedKeys,
+    onSelectionChange: (keys) => {
+      setSelectedKeys(keys as Set<React.Key>);
+    },
+  });
+
+  const reset = () => {
+    state.selectionManager.clearSelection();
+  };
+
+  // const items = Object.fromEntries(
+  //   [...state.collection].map((item) => {
+  //     return [item.key, item.props.children];
+  //   })
+  // );
+  const [activeId, setActiveId] = useState<React.Key | null>(null);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: { delay: 150, tolerance: 1 },
     })
   );
 
   const { listBoxProps } = useListBox(completeProps, state, domRef);
 
+  // const getIndex = (id: string) => items.findIndex((item) => item.id === id);
+
+  const ts = [
+    { id: 'p1', name: 'p1' },
+    { id: 'p2', name: 'p2' },
+  ];
+  const getIndex = (id: UniqueIdentifier) => items.findIndex((item) => item.id === id);
+  const activeIndex = activeId ? getIndex(activeId) : -1;
   // saba: need to fix padding
   return (
     <StyledDropdownMenu
@@ -56,7 +110,7 @@ const DropdownMenu = (props: SelectMenuProps) => {
         minWidth: `${width} !important`,
       }}
     >
-      <Flex direction="column" gap="0px">
+      <Flex direction="column" gap="1">
         {search && <DropdownSearch />}
 
         {(isReset || !!title) && (
@@ -99,15 +153,78 @@ const DropdownMenu = (props: SelectMenuProps) => {
           css={{ ...(css as any) }}
           {...listBoxProps}
         >
-          {[...state.collection].map((item) => {
-            let selectItem = <DropdownItem key={item.key} color={color} item={item} />;
+          <DndContext
+            sensors={sensors}
+            onDragStart={({ active }) => {
+              console.log('dnd active id', active, active.id);
+              if (!active) {
+                return;
+              }
 
-            if (item.wrapper) {
-              selectItem = item.wrapper(selectItem);
-            }
+              setActiveId(active.id);
+            }}
+            onDragEnd={({ over }) => {
+              setActiveId(null);
 
-            return selectItem;
-          })}
+              if (over) {
+                const overIndex = getIndex(over.id);
+                if (activeIndex !== overIndex) {
+                  setItems((items) => reorderItems(items, activeIndex, overIndex));
+                }
+              }
+            }}
+            onDragCancel={() => setActiveId(null)}
+          >
+            {/* <SortableContext items={items}> */}
+            {[...state.collection]
+              .filter((item) => searchFunc(item))
+              .map((item) => {
+                let selectItem = (
+                  <DropdownItem
+                    key={item.key}
+                    color={color}
+                    id={item.key.toString()}
+                    item={item}
+                    state={state}
+                  />
+                );
+                if (item.wrapper) {
+                  selectItem = item.wrapper(selectItem);
+                }
+
+                return selectItem;
+              })}
+            {/* </SortableContext> */}
+          </DndContext>
+
+          {/* <DndContext
+            sensors={sensors}
+            onDragStart={({ active }) => {
+              console.log('dnd active id', active, active.id.toString());
+              if (!active) {
+                return;
+              }
+
+              setActiveId(active.id.toString());
+            }}
+            onDragEnd={({ over }) => {
+              setActiveId(null);
+
+              if (over) {
+                const overIndex = getIndex(over.id.toString());
+                if (activeIndex !== overIndex) {
+                  setItems((items) => reorderItems(items, activeIndex, overIndex));
+                }
+              }
+            }}
+            onDragCancel={() => setActiveId(null)}
+          >
+            <SortableContext items={ts}>
+              {ts.map((it) => (
+                <SItem id={it.id} name={it.name} />
+              ))}
+            </SortableContext>
+          </DndContext> */}
         </StyledDropdownUnorderedList>
       </Flex>
     </StyledDropdownMenu>

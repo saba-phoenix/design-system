@@ -9,6 +9,8 @@ import Modal from '../UI/Modal';
 // import Select from '../UI/select/index';
 import Select from '../UI/select2/index';
 import Dropdown from '../UI/dropdown/index';
+
+// import { Sortable } from '../UI/sortable/sortable';
 import { Switch } from '../components/Switch';
 import { ControlGroup } from '../components/ControlGroup';
 import { Text } from '../UI/Text';
@@ -119,6 +121,7 @@ import {
 } from '@radix-ui/react-icons';
 import { Toolbar } from '../custom/Toolbar';
 import { DarkThemeButton } from '../custom/DarkThemeButton';
+import { verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 function Potion() {
   return (
@@ -414,10 +417,10 @@ function Potion() {
               <Dropdown
                 selection="single"
                 options={[
-                  { key: 'placeholder 1', name: 'placeholder 1' },
-                  { key: 'placeholder 2', name: 'placeholder 2' },
-                  { key: 'placeholder 3', name: 'placeholder 3' },
-                  { key: 'placeholder 4', name: 'placeholder 4' },
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
                 <Dropdown.Trigger>
@@ -429,10 +432,10 @@ function Potion() {
               <Dropdown
                 selection="multiple"
                 options={[
-                  { key: 'placeholder 1', name: 'placeholder 1' },
-                  { key: 'placeholder 2', name: 'placeholder 2' },
-                  { key: 'placeholder 3', name: 'placeholder 3' },
-                  { key: 'placeholder 4', name: 'placeholder 4' },
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
                 <Dropdown.Trigger>
@@ -443,10 +446,10 @@ function Potion() {
               <Dropdown
                 selection="none"
                 options={[
-                  { key: 'placeholder 1', name: 'placeholder 1' },
-                  { key: 'placeholder 2', name: 'placeholder 2' },
-                  { key: 'placeholder 3', name: 'placeholder 3' },
-                  { key: 'placeholder 4', name: 'placeholder 4' },
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
                 <Dropdown.Trigger>
@@ -459,10 +462,10 @@ function Potion() {
                 selection="multiple"
                 title={'Title goes here'}
                 options={[
-                  { key: 'placeholder 1', name: 'placeholder 1' },
-                  { key: 'placeholder 2', name: 'placeholder 2' },
-                  { key: 'placeholder 3', name: 'placeholder 3' },
-                  { key: 'placeholder 4', name: 'placeholder 4' },
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
                 <Dropdown.Trigger>
@@ -475,10 +478,10 @@ function Potion() {
                 title={'Title goes here'}
                 isReset={true}
                 options={[
-                  { key: 'placeholder 1', name: 'placeholder 1' },
-                  { key: 'placeholder 2', name: 'placeholder 2' },
-                  { key: 'placeholder 3', name: 'placeholder 3' },
-                  { key: 'placeholder 4', name: 'placeholder 4' },
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
                 <Dropdown.Trigger>
@@ -490,10 +493,10 @@ function Potion() {
                 selection="multiple"
                 search={true}
                 options={[
-                  { key: 'placeholder 1', name: 'placeholder 1' },
-                  { key: 'placeholder 2', name: 'placeholder 2' },
-                  { key: 'placeholder 3', name: 'placeholder 3' },
-                  { key: 'placeholder 4', name: 'placeholder 4' },
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
                 <Dropdown.Trigger>
@@ -586,6 +589,46 @@ function Potion() {
             <br></br>
           </Container>
         </Section>
+        {/* <Section size="3">
+          <Container size="2">
+            <Heading id="modals" css={{ fontSize: '24px', mb: '$6', scrollMarginTop: '$7' }}>
+              Sortable
+            </Heading>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <Sortable strategy={verticalListSortingStrategy} itemCount={50} handle />
+ 
+            <br></br>
+            <br></br>
+
+            <br></br>
+   
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
+            <br></br>
+            <br></br>
+
+            <br></br>
+          </Container>
+        </Section> */}
       </Box>
     </Box>
   );

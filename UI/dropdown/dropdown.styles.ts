@@ -67,7 +67,53 @@ export const StyledDropdownItemContent = styled('span', {
   flex: '1 1 0%',
 });
 
-export const StyledDropdownItem = styled('li', {
+export const StyledDropdownItemWrapper = styled('li', {
+  $$selectItemPressedScale: 0.97,
+  $$selectItemBorderRadius: '$radii$default',
+  display: 'flex',
+  outline: 'none',
+  p: 0,
+  m: 0,
+  borderRadius: '4px',
+  variants: {
+    hovered: {
+      true: {
+        backgroundColor: '#F2F4F7',
+      },
+      false: {},
+    },
+  },
+  // cursor: 'pointer',
+  // fontFamily: '$system',
+  // fontSize: '13px',
+  // lineHeight: '16px',
+  // fontWeight: 600,
+  // borderRadius: '4px',
+
+  // justifyContent: 'center',
+  // justifyItems: 'center',
+  // alignItems: 'center',
+  // bg: 'transparent',
+  // position: 'relative',
+  // height: '40px',
+  // pl: '7px',
+  // py: '14px',
+  // br: '$$selectItemBorderRadius',
+  // color: '$textBlack',
+  // /* Avoid blurriness */
+  // transform: 'translateZ(0)',
+  // backfaceVisibility: 'hidden',
+  // variants: {
+  //   hovered: {
+  //     true: {
+  //       backgroundColor: '#F2F4F7',
+  //     },
+  //     false: {},
+  //   },
+  // },
+});
+
+export const StyledDropdownItem = styled('div', {
   $$selectItemPressedScale: 0.97,
   $$selectItemBorderRadius: '$radii$default',
   display: 'flex',
@@ -77,7 +123,6 @@ export const StyledDropdownItem = styled('li', {
   fontSize: '13px',
   lineHeight: '16px',
   fontWeight: 600,
-  borderRadius: '4px',
 
   justifyContent: 'center',
   justifyItems: 'center',
@@ -85,6 +130,7 @@ export const StyledDropdownItem = styled('li', {
   bg: 'transparent',
   position: 'relative',
   height: '40px',
+  // width: '100%',
   pl: '7px',
   py: '14px',
   br: '$$selectItemBorderRadius',
@@ -92,14 +138,6 @@ export const StyledDropdownItem = styled('li', {
   /* Avoid blurriness */
   transform: 'translateZ(0)',
   backfaceVisibility: 'hidden',
-  variants: {
-    hovered: {
-      true: {
-        backgroundColor: '#F2F4F7',
-      },
-      false: {},
-    },
-  },
 });
 
 export const StyledDropdownSectionWrapper = styled('li', {

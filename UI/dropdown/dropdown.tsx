@@ -14,17 +14,11 @@ import DropdownTrigger from './dropdown-trigger';
 import { useDropdown, UseDropdownProps } from './use-dropdown';
 import { contrast } from 'chroma-js';
 
-type Option = {
-  key: string;
-  name: string;
-};
-
 interface Props extends UseDropdownProps {
   /**
    * The content of the select. It is usually the `Select.Trigger`,
    * and `Select.Menu`
    */
-  options: Option[];
 }
 
 export type DropdownProps = Props;
@@ -34,11 +28,8 @@ const Dropdown = (props: DropdownProps) => {
 
   const ref = useRef<HTMLUListElement>(null);
   console.log('rerendered');
-  const collections = options.map(({ key, name }) => (
-    <DropdownItemBase key={key}>{name}</DropdownItemBase>
-  ));
   // const [dropdownTrigger, menu] = React.Children.toArray(children);
-  const context = useDropdown({ ...props, children: collections, ref });
+  const context = useDropdown({ ...props, options, ref });
 
   return (
     <DropdownProvider value={context}>

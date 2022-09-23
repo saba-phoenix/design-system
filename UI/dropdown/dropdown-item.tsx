@@ -14,17 +14,27 @@ import { CheckBox } from '../CheckBox';
 import { __DEV__ } from '../utils/assertion';
 import { useDropdownContext } from './dropdown-context';
 import type { IFocusRingAria, IOptionAria } from './dropdown-types';
-import { StyledDropdownItem, StyledDropdownItemContent } from './dropdown.styles';
+import {
+  StyledDropdownItem,
+  StyledDropdownItemContent,
+  StyledDropdownItemWrapper,
+} from './dropdown.styles';
 import { ContextMenu } from '@radix-ui/react-context-menu';
+import { useSortable } from '@dnd-kit/sortable';
+import { cornersOfRectangle } from '@dnd-kit/core/dist/utilities/algorithms/helpers';
+import { SItem } from './SItem';
+import { SItemD } from './SItemD';
+import { CSS as DndCSS } from '@dnd-kit/utilities';
 
 interface Props<T> extends FocusableProps {
   item: Node<T>;
-  // state: ListState<T>;
+  state: ListState<T>;
   isVirtualized?: boolean;
   withDivider?: boolean;
   command?: string;
   description?: string;
   icon?: ReactNode;
+  id: string;
   as?: keyof JSX.IntrinsicElements;
 
   onAction?: (key: Key) => void;
@@ -38,15 +48,19 @@ const DropdownItem = <T extends object>({
   as,
   css,
   item,
-  // state,
+  id,
+  state,
   autoFocus,
 }: SelectItemProps<T>) => {
   const { rendered, key } = item;
 
-  const { selection, state } = useDropdownContext();
-  if (!state) {
-    return <p>dfs</p>;
-  }
+  const { selection } = useDropdownContext();
+
+  console.log('dnd id', key);
+
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: key,
+  });
 
   // const isSelected = key === selectState.selectedKey;
   const isSelected = state.selectionManager.isSelected(key);
@@ -55,98 +69,128 @@ const DropdownItem = <T extends object>({
 
   console.log('is selected', key, isSelected);
 
-  const ref = useRef<HTMLLIElement>(null);
+  const myRef = useRef<HTMLDivElement | null>(null);
 
-  const { pressProps, isPressed } = usePress({
-    ref,
-    isDisabled,
-  });
+  // const { pressProps, isPressed } = usePress({
+  //   ref: myRef,
+  //   isDisabled,
+  // });
   const context = useDropdownContext();
 
-  if (isPressed) {
-    const ad = new Set<React.Key>().add(key);
-    console.log('ad', ad);
-    // const ad1 = [...state.selectionManager.selectedKeys, key];
-    // console.log('ad1', ad1);
-    // const ad2 = new Set(ad1);
-    if (selection === 'single') {
-      state.selectionManager.setSelectedKeys(ad);
-    }
-    if (selection !== 'multiple') {
-      // state.selectionManager.setSelectedKeys(ad);
-      context.setOpen(false);
-    }
+  // const { isFocusVisible, focusProps }: IFocusRingAria = useFocusRing({
+  //   autoFocus,
+  // });
 
-    console.log('all items', state.selectionManager.selectionBehavior);
-
-    // console.log('state selected', context.state.selectionManager.selectedKeys);
-  }
-
-  const { isFocusVisible, focusProps }: IFocusRingAria = useFocusRing({
-    autoFocus,
-  });
-
-  const { optionProps, labelProps }: IOptionAria = useOption(
+  const { isPressed, optionProps, labelProps }: IOptionAria = useOption(
     {
       key,
       'aria-label': item['aria-label'],
-      isDisabled,
-      isSelected,
-      shouldSelectOnPressUp: false,
-      shouldFocusOnHover: true,
+      // isDisabled,
+      // isSelected,
+      // shouldSelectOnPressUp: false,
+      // shouldFocusOnHover: true,
     },
     state,
-    ref
+    myRef
   );
+
+  // if (isPressed) {
+  //   const ad = new Set<React.Key>().add(key);
+  //   console.log('ad', ad);
+  //   // const ad1 = [...state.selectionManager.selectedKeys, key];
+  //   // console.log('ad1', ad1);
+  //   // const ad2 = new Set(ad1);
+  //   // if (selection === 'single') {
+  //   //   state.selectionManager.setSelectedKeys(ad);
+  //   // }
+  //   if (selection !== 'multiple') {
+  //     // state.selectionManager.setSelectedKeys(ad);
+  //     context.setOpen(false);
+  //   }
+
+  //   console.log('all items', state.selectionManager.selectionBehavior);
+
+  //   // console.log('state selected', context.state.selectionManager.selectedKeys);
+  // }
 
   const { hoverProps, isHovered } = useHover({ isDisabled });
   // console.log('hover', key, isHovered);
 
-  const isSelectable = state.selectionManager.selectionMode !== 'none' && !isDisabled;
-  // const isSelectable = false;
-  const getState = useMemo(() => {
-    if (isHovered) return 'hovered';
-    if (isSelected) return 'selected';
-    if (isPressed) return 'pressed';
+  // const isSelectable = state.selectionManager.selectionMode !== 'none' && !isDisabled;
+  // // const isSelectable = false;
+  // const getState = useMemo(() => {
+  //   // if (isHovered) return 'hovered';
+  //   if (isSelected) return 'selected';
+  //   if (isPressed) return 'pressed';
 
-    return isDisabled ? 'disabled' : 'ready';
-  }, [isSelected, isDisabled, isHovered, isPressed]);
+  //   return isDisabled ? 'disabled' : 'ready';
+  // }, [isSelected, isDisabled, isPressed]);
 
   return (
-    <StyledDropdownItem
-      ref={ref}
-      hovered={isHovered}
-      {...mergeProps(optionProps, hoverProps, pressProps, focusProps)}
-      as={item.props.as || as}
-      // color={item.props.color || color}
-      css={{ ...mergeProps(css, item.props.css) }}
-      data-state={getState}
-      // isDisabled={isDisabled}
-      // isFocusVisible={isFocusVisible}
-      // isFocused={isFocused}
-    >
-      <StyledDropdownItemContent className="potionui-Dropdown-item-content" {...labelProps}>
-        {selection !== 'none' && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'left',
-              gap: '9px',
-              width: '100%',
-              alignContent: 'center',
-              alignItems: 'center',
+    <>
+      {/* <SItem id={33} name={'dd'} /> */}
+      <StyledDropdownItemWrapper
+        ref={setNodeRef}
+        hovered={isHovered}
+        css={{
+          transform: DndCSS.Transform.toString(transform),
+          transition,
+          // transition: transition,
+          // '--translate-x': transform ? `${Math.round(transform.x)}px` : undefined,
+          // '--translate-y': transform ? `${Math.round(transform.y)}px` : undefined,
+          // '--scale-x': transform?.scaleX ? `${transform.scaleX}` : undefined,
+          // '--scale-y': transform?.scaleY ? `${transform.scaleY}` : undefined,
+          // '--index': index,
+          // '--color': color,
+        }}
+        style={{ transform: DndCSS.Transform.toString(transform), transition }}
+        {...attributes}
+        {...listeners}
+        {...hoverProps}
+      >
+        <StyledDropdownItem
+          ref={(el) => {
+            myRef.current = el;
+            // setNodeRef(el);
+          }}
+          {...mergeProps(optionProps)}
+          // as={item.props.as || as}
+          // color={item.props.color || color}
+          // css={{ ...mergeProps(css, item.props.css) }}
+          // data-state={getState}
+        >
+          <StyledDropdownItemContent
+            className="potionui-Dropdown-item-content"
+            onClick={(e) => {
+              console.log('dnd act item pressed');
             }}
+            {...labelProps}
           >
-            <CheckBox
-              status={isSelected ? 'selected' : selection === 'multiple' ? 'unselected' : 'plain'}
-            />
-            {rendered}
-          </div>
-        )}
-        {selection === 'none' && <>{rendered}</>}
-      </StyledDropdownItemContent>
-    </StyledDropdownItem>
+            {selection !== 'none' && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'left',
+                  gap: '9px',
+                  width: '100%',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <CheckBox
+                  status={
+                    isSelected ? 'selected' : selection === 'multiple' ? 'unselected' : 'plain'
+                  }
+                />
+                {rendered}
+              </div>
+            )}
+            {selection === 'none' && <>{rendered}</>}
+          </StyledDropdownItemContent>
+        </StyledDropdownItem>
+      </StyledDropdownItemWrapper>
+    </>
   );
 };
 
