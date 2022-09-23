@@ -366,8 +366,8 @@ function Potion() {
             <br></br>
             <br></br>
             <Flex direction="row" css={{ gap: '100px' }}>
-              {/* <Select type="single">
-                <Select.Item key="saba"> Sabaaa</Select.Item>
+              <Select type="single">
+                <Select.Item key="saba"> Placeholder1</Select.Item>
                 <Select.Item> Placeholder 2 </Select.Item>
                 <Select.Item> Placeholder 3 </Select.Item>
                 <Select.Item> Placeholder 4 </Select.Item>
@@ -377,7 +377,7 @@ function Potion() {
                 <Select.Item> Placeholder 2 </Select.Item>
                 <Select.Item> Placeholder 3 </Select.Item>
                 <Select.Item> Placeholder 4 </Select.Item>
-              </Select> */}
+              </Select>
             </Flex>
             <br></br>
             <br></br>
@@ -413,7 +413,7 @@ function Potion() {
             <br></br>
             <br></br>
             <br></br>
-            <Flex direction="row" css={{ gap: '70px' }}>
+            <Flex direction="row" css={{ gap: '70px', flexWrap: 'wrap' }}>
               <Dropdown
                 selection="single"
                 options={[
@@ -502,6 +502,24 @@ function Potion() {
                 <Dropdown.Trigger>
                   {/* <Demo isOpen={true} title="we"></Demo> */}
                   <Button variant="secondaryPlusIcon">search</Button>
+                </Dropdown.Trigger>
+              </Dropdown>
+
+              <Dropdown
+                selection="multiple"
+                // search={true}
+                drag
+                title="title"
+                options={[
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
+                ]}
+              >
+                <Dropdown.Trigger>
+                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                  <Button variant="secondaryPlusIcon">Drag</Button>
                 </Dropdown.Trigger>
               </Dropdown>
             </Flex>

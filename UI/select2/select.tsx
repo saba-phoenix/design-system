@@ -39,16 +39,34 @@ const Select = (props: SelectProps) => {
           <Popover.Content
             side="bottom"
             sideOffset={4}
-            onPointerDownOutside={(e) => {
-              console.log('pointer down outside');
-              context.setOpen(false);
-            }}
-            onPointerDown={(e) => {
-              console.log('clicked');
-              if (type === 'single') {
-                context.setOpen(false);
-              }
-            }}
+            // asChild
+            // onP
+            // onBlur={(e) => {
+            //   if (context.isOpen) context.setOpen(false);
+            //   console.log('iii pointer down outside');
+            // }}
+            // onLostPointerCapture={(e) => {
+            //   if (context.isOpen) context.setOpen(false);
+            //   console.log('iii pointer down outside');
+            // }}
+            // onAuxClick={(e) => {
+            //   if (context.isOpen) context.setOpen(false);
+            //   console.log('iii pointer down outside');
+            // }}
+            // onFocusOutside={(e) => {
+            //   if (context.isOpen) context.setOpen(false);
+            //   console.log('iii pointer down outside');
+            // }}
+            // onPointerDownOutside={(e) => {
+            //   if (context.isOpen) context.setOpen(false);
+            //   console.log('iii pointer down outside');
+            // }}
+            // onPointerDown={(e) => {
+            //   console.log('iii clicked');
+            //   if (type === 'single') {
+            //     context.setOpen(false);
+            //   }
+            // }}
           >
             <SelectMenu aria-label="select-menu" ref={ref}>
               {children}

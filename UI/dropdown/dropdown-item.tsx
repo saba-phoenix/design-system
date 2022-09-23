@@ -1,4 +1,4 @@
-import React, { ReactNode, Key, useRef, useMemo } from 'react';
+import React, { ReactNode, Key, useRef, useMemo, useState } from 'react';
 
 import { useFocusRing } from '@react-aria/focus';
 import { useHover, usePress } from '@react-aria/interactions';
@@ -27,6 +27,7 @@ import { SItem } from './SItem';
 import { SItemD } from './SItemD';
 import { CSS as DndCSS } from '@dnd-kit/utilities';
 import { Holder } from '../Icons/Holder';
+import { useDndMonitor } from '@dnd-kit/core';
 
 interface Props<T> extends FocusableProps {
   item: Node<T>;
@@ -60,7 +61,14 @@ const DropdownItem = <T extends object>({
 
   console.log('dnd id', key);
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    setActivatorNodeRef,
+  } = useSortable({
     id: key,
   });
 
@@ -96,37 +104,21 @@ const DropdownItem = <T extends object>({
     myRef
   );
 
-  // if (isPressed) {
-  //   const ad = new Set<React.Key>().add(key);
-  //   console.log('ad', ad);
-  //   // const ad1 = [...state.selectionManager.selectedKeys, key];
-  //   // console.log('ad1', ad1);
-  //   // const ad2 = new Set(ad1);
-  //   // if (selection === 'single') {
-  //   //   state.selectionManager.setSelectedKeys(ad);
-  //   // }
-  //   if (selection !== 'multiple') {
-  //     // state.selectionManager.setSelectedKeys(ad);
-  //     context.setOpen(false);
-  //   }
-
-  //   console.log('all items', state.selectionManager.selectionBehavior);
-
-  //   // console.log('state selected', context.state.selectionManager.selectedKeys);
-  // }
-
   const { hoverProps, isHovered } = useHover({ isDisabled });
-  // console.log('hover', key, isHovered);
+  // const [isDragging, setDragging] = useState<boolean>(false);
 
-  // const isSelectable = state.selectionManager.selectionMode !== 'none' && !isDisabled;
-  // // const isSelectable = false;
-  // const getState = useMemo(() => {
-  //   // if (isHovered) return 'hovered';
-  //   if (isSelected) return 'selected';
-  //   if (isPressed) return 'pressed';
-
-  //   return isDisabled ? 'disabled' : 'ready';
-  // }, [isSelected, isDisabled, isPressed]);
+  // useDndMonitor({
+  //   onDragStart(event) {
+  //     console.log('rrr: drag start');
+  //     setDragging(true);
+  //   },
+  //   onDragMove(event) {},
+  //   onDragOver(event) {
+  //     setDragging(false);
+  //   },
+  //   onDragEnd(event) {},
+  //   onDragCancel(event) {},
+  // });
 
   return (
     <>
@@ -137,17 +129,9 @@ const DropdownItem = <T extends object>({
         css={{
           transform: DndCSS.Transform.toString(transform),
           transition,
-          // transition: transition,
-          // '--translate-x': transform ? `${Math.round(transform.x)}px` : undefined,
-          // '--translate-y': transform ? `${Math.round(transform.y)}px` : undefined,
-          // '--scale-x': transform?.scaleX ? `${transform.scaleX}` : undefined,
-          // '--scale-y': transform?.scaleY ? `${transform.scaleY}` : undefined,
-          // '--index': index,
-          // '--color': color,
         }}
-        style={{ transform: DndCSS.Transform.toString(transform), transition }}
         {...attributes}
-        {...listeners}
+        // {...listeners}
         {...hoverProps}
       >
         <StyledDropdownItem
@@ -191,7 +175,9 @@ const DropdownItem = <T extends object>({
             {selection === 'none' && <>{rendered}</>}
           </StyledDropdownItemContent>
         </StyledDropdownItem>
-        <Holder />
+        {context.drag && (
+          <Holder ref={setActivatorNodeRef} listeners={listeners} isDragging={context.isDragging} />
+        )}
       </StyledDropdownItemWrapper>
     </>
   );

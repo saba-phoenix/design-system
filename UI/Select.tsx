@@ -10,7 +10,7 @@ const StyledTrigger = styled(SelectPrimitive.SelectTrigger, {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  borderRadius: '4px',
+  borderRadius: '$radii$default',
   padding: '12px',
   width: '224px',
   height: '36px',

@@ -18,7 +18,6 @@ import { Text } from '../Text';
 import { Button } from '../Button';
 import { DropdownSearch } from './dropdown-search';
 
-
 import {
   DndContext,
   MouseSensor,
@@ -61,6 +60,7 @@ const DropdownMenu = (props: SelectMenuProps) => {
     collections,
     selectedKeys,
     setSelectedKeys,
+    setDragging,
   } = context;
 
   const completeProps = {
@@ -96,7 +96,7 @@ const DropdownMenu = (props: SelectMenuProps) => {
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
-      activationConstraint: { delay: 150, tolerance: 1 },
+      activationConstraint: { delay: 1, tolerance: 5 },
     })
   );
 
@@ -110,6 +110,7 @@ const DropdownMenu = (props: SelectMenuProps) => {
   ];
   const getIndex = (id: UniqueIdentifier) => items.findIndex((item) => item.id === id);
   const activeIndex = activeId ? getIndex(activeId) : -1;
+
   // saba: need to fix padding
   return (
     <StyledDropdownMenu
@@ -170,10 +171,11 @@ const DropdownMenu = (props: SelectMenuProps) => {
               if (!active) {
                 return;
               }
-
+              setDragging(true);
               setActiveId(active.id);
             }}
             onDragEnd={({ over }) => {
+              console.log('rrr, end', over);
               setActiveId(null);
 
               if (over) {
@@ -182,6 +184,7 @@ const DropdownMenu = (props: SelectMenuProps) => {
                   setItems((items) => reorderItems(items, activeIndex, overIndex));
                 }
               }
+              setDragging(false);
             }}
             onDragCancel={() => setActiveId(null)}
           >

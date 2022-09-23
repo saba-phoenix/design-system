@@ -58,7 +58,7 @@ const getTitleFromSelectedKeys = (
     .filter(([key, value]) => selectedKeys.has(key))
     .map(([key, value]) => value)
     .join(', ');
-  if (titleStrings.length > 30) {
+  if (titleStrings.length > 33) {
     titleStrings = titleStrings.substr(0, 30).concat('...');
   }
   return titleStrings;

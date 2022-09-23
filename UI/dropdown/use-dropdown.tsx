@@ -22,6 +22,7 @@ type PopoverProps = {
   search?: boolean;
   isReset?: boolean;
   options: Option[];
+  drag?: boolean;
 };
 
 export interface UseDropdownProps extends PopoverProps, AriaListBoxProps<any> {}
@@ -37,6 +38,7 @@ export function useDropdown(props: UseDropdownProps) {
     search = false,
     title,
     options,
+    drag,
     ...popoverProps
   } = props;
 
@@ -44,6 +46,7 @@ export function useDropdown(props: UseDropdownProps) {
   const [selectedKeys, setSelectedKeys] = useState<Set<React.Key>>(new Set());
   const [searchPhrase, setSearchPhrase] = useState<string | undefined>('');
   const [items, setItems] = useState<Option[]>(options);
+  const [isDragging, setDragging] = useState<boolean>(false);
 
   console.log('selected keys', selectedKeys);
 
@@ -85,6 +88,7 @@ export function useDropdown(props: UseDropdownProps) {
     setOpen,
     selection,
     ref,
+    drag,
     // state,
     // reset,
     search,
@@ -100,6 +104,8 @@ export function useDropdown(props: UseDropdownProps) {
     setItems,
     selectedKeys,
     setSelectedKeys,
+    isDragging,
+    setDragging,
     // state,
     // onClose: state.selectionManager.setFocused,
     // autoFocus: state.selectionManager.isFocused || true,

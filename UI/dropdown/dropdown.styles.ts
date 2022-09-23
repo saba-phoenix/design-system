@@ -4,6 +4,13 @@ export const StyledDropdownUnorderedList = styled('ul', {
   listStyle: 'none',
   m: 0,
   p: 0,
+  variants: {
+    dragging: {
+      true: {
+        cursor: 'grabbing',
+      },
+    },
+  },
   // $$selectMenuPadding: '1px',
   // $$selectMenuWidth: '224px',
   // $$selectMenuMinWidth: '224px',

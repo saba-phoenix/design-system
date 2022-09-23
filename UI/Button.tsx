@@ -51,11 +51,10 @@ export const StyledButton = styled('button', {
         color: '$white',
         px: '16px',
         py: '4px',
-        '@hover': {
-          '&:hover': {
-            backgroundColor: '$hoverBlue',
-          },
+        '&:hover': {
+          backgroundColor: '$hoverBlue',
         },
+
         '&:active': {
           backgroundColor: '$clickBlue',
         },
@@ -66,11 +65,11 @@ export const StyledButton = styled('button', {
         color: '$white',
         px: '16px',
         py: '4px',
-        '@hover': {
-          '&:hover': {
-            backgroundColor: '$hoverRed',
-          },
+
+        '&:hover': {
+          backgroundColor: '$hoverRed',
         },
+
         '&:active': {
           backgroundColor: '$clickRed',
         },
@@ -83,11 +82,10 @@ export const StyledButton = styled('button', {
         px: '16px',
         py: '4px',
         border: '1px solid $dividerGray',
-        '@hover': {
-          '&:hover': {
-            border: '2px solid rgba(0, 105, 218, 0.2)',
-            px: '15px',
-          },
+
+        '&:hover': {
+          border: '2px solid rgba(0, 105, 218, 0.2)',
+          px: '15px',
         },
         '&:focus': {
           border: '1px solid $primaryBlue',
@@ -105,11 +103,11 @@ export const StyledButton = styled('button', {
         color: '$white',
         px: '16px',
         py: '10px',
-        '@hover': {
-          '&:hover': {
-            backgroundColor: '$hoverBlue',
-          },
+
+        '&:hover': {
+          backgroundColor: '$hoverBlue',
         },
+
         '&:active': {
           backgroundColor: '$clickBlue',
         },
@@ -122,12 +120,12 @@ export const StyledButton = styled('button', {
         px: '16px',
         py: '4px',
         border: '1px solid $dividerGray',
-        '@hover': {
-          '&:hover': {
-            border: '2px solid rgba(0, 105, 218, 0.2)',
-            px: '15px',
-          },
+
+        '&:hover': {
+          border: '2px solid rgba(0, 105, 218, 0.2)',
+          px: '15px',
         },
+
         '&:focus': {
           border: '1px solid $primaryBlue',
           px: '16px',
@@ -146,12 +144,12 @@ export const StyledButton = styled('button', {
         px: '8px',
         py: '8px',
         border: '1px solid $dividerGray',
-        '@hover': {
-          '&:hover': {
-            px: '7px',
-            border: '2px solid rgba(0, 105, 218, 0.2)',
-          },
+
+        '&:hover': {
+          px: '7px',
+          border: '2px solid rgba(0, 105, 218, 0.2)',
         },
+
         '&:focus': {
           border: '1px solid $primaryBlue',
         },
@@ -169,11 +167,11 @@ export const StyledButton = styled('button', {
         px: '4px',
         py: '4px',
         border: '1px solid $dividerGray',
-        '@hover': {
-          '&:hover': {
-            border: '2px solid rgba(0, 105, 218, 0.2)',
-          },
+
+        '&:hover': {
+          border: '2px solid rgba(0, 105, 218, 0.2)',
         },
+
         '&:focus': {
           border: '1px solid $primaryBlue',
         },
@@ -188,11 +186,11 @@ export const StyledButton = styled('button', {
         color: '$textBlack',
         px: '16px',
         py: '10px',
-        '@hover': {
-          '&:hover': {
-            backgroundColor: '$dividerGray',
-          },
+
+        '&:hover': {
+          backgroundColor: '$dividerGray',
         },
+
         '&:active': {
           backgroundColor: '$inactiveTextGray',
         },
@@ -202,11 +200,11 @@ export const StyledButton = styled('button', {
         color: '$textBlack',
         px: '16px',
         py: '10px',
-        '@hover': {
-          '&:hover': {
-            backgroundColor: '$dividerGray',
-          },
+
+        '&:hover': {
+          backgroundColor: '$dividerGray',
         },
+
         '&:active': {
           backgroundColor: '$inactiveTextGray',
         },
@@ -216,11 +214,11 @@ export const StyledButton = styled('button', {
         color: '$textBlack',
         width: '32px',
         padding: '8px',
-        '@hover': {
-          '&:hover': {
-            backgroundColor: '$dividerGray',
-          },
+
+        '&:hover': {
+          backgroundColor: '$dividerGray',
         },
+
         '&:active': {
           backgroundColor: '$inactiveTextGray',
         },
@@ -232,11 +230,11 @@ export const StyledButton = styled('button', {
         backgroundColor: '$white',
         color: '$textBlack',
         padding: '4px',
-        '@hover': {
-          '&:hover': {
-            backgroundColor: '$dividerGray',
-          },
+
+        '&:hover': {
+          backgroundColor: '$dividerGray',
         },
+
         '&:active': {
           backgroundColor: '$inactiveTextGray',
         },
