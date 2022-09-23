@@ -121,7 +121,7 @@ import {
 } from '@radix-ui/react-icons';
 import { Toolbar } from '../custom/Toolbar';
 import { DarkThemeButton } from '../custom/DarkThemeButton';
-import { verticalListSortingStrategy } from '@dnd-kit/sortable';
+// import { verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 function Potion() {
   return (

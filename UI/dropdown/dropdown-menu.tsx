@@ -18,6 +18,7 @@ import { Text } from '../Text';
 import { Button } from '../Button';
 import { DropdownSearch } from './dropdown-search';
 
+
 import {
   DndContext,
   MouseSensor,
@@ -25,7 +26,15 @@ import {
   useDndMonitor,
   useSensor,
   useSensors,
+  Modifiers,
 } from '@dnd-kit/core';
+
+import {
+  restrictToVerticalAxis,
+  restrictToFirstScrollableAncestor,
+  restrictToWindowEdges,
+  restrictToParentElement,
+} from '@dnd-kit/modifiers';
 import { SortableContext, arrayMove as reorderItems, NewIndexGetter } from '@dnd-kit/sortable';
 import { SItem } from './SItem';
 
@@ -155,6 +164,7 @@ const DropdownMenu = (props: SelectMenuProps) => {
         >
           <DndContext
             sensors={sensors}
+            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
             onDragStart={({ active }) => {
               console.log('dnd active id', active, active.id);
               if (!active) {
@@ -175,26 +185,26 @@ const DropdownMenu = (props: SelectMenuProps) => {
             }}
             onDragCancel={() => setActiveId(null)}
           >
-            {/* <SortableContext items={items}> */}
-            {[...state.collection]
-              .filter((item) => searchFunc(item))
-              .map((item) => {
-                let selectItem = (
-                  <DropdownItem
-                    key={item.key}
-                    color={color}
-                    id={item.key.toString()}
-                    item={item}
-                    state={state}
-                  />
-                );
-                if (item.wrapper) {
-                  selectItem = item.wrapper(selectItem);
-                }
+            <SortableContext items={items}>
+              {[...state.collection]
+                .filter((item) => searchFunc(item))
+                .map((item) => {
+                  let selectItem = (
+                    <DropdownItem
+                      key={item.key}
+                      color={color}
+                      id={item.key.toString()}
+                      item={item}
+                      state={state}
+                    />
+                  );
+                  if (item.wrapper) {
+                    selectItem = item.wrapper(selectItem);
+                  }
 
-                return selectItem;
-              })}
-            {/* </SortableContext> */}
+                  return selectItem;
+                })}
+            </SortableContext>
           </DndContext>
 
           {/* <DndContext

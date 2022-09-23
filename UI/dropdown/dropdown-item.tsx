@@ -14,6 +14,7 @@ import { CheckBox } from '../CheckBox';
 import { __DEV__ } from '../utils/assertion';
 import { useDropdownContext } from './dropdown-context';
 import type { IFocusRingAria, IOptionAria } from './dropdown-types';
+import { AiOutlineHolder } from 'react-icons/ai';
 import {
   StyledDropdownItem,
   StyledDropdownItemContent,
@@ -25,6 +26,7 @@ import { cornersOfRectangle } from '@dnd-kit/core/dist/utilities/algorithms/help
 import { SItem } from './SItem';
 import { SItemD } from './SItemD';
 import { CSS as DndCSS } from '@dnd-kit/utilities';
+import { Holder } from '../Icons/Holder';
 
 interface Props<T> extends FocusableProps {
   item: Node<T>;
@@ -189,6 +191,7 @@ const DropdownItem = <T extends object>({
             {selection === 'none' && <>{rendered}</>}
           </StyledDropdownItemContent>
         </StyledDropdownItem>
+        <Holder />
       </StyledDropdownItemWrapper>
     </>
   );

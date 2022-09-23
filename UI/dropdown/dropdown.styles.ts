@@ -71,8 +71,11 @@ export const StyledDropdownItemWrapper = styled('li', {
   $$selectItemPressedScale: 0.97,
   $$selectItemBorderRadius: '$radii$default',
   display: 'flex',
+  alignContent: 'center',
+  justifyContent: 'space-between',
   outline: 'none',
   p: 0,
+  paddingRight: '12px',
   m: 0,
   borderRadius: '4px',
   variants: {
