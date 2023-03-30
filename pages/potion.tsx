@@ -9,6 +9,7 @@ import Modal from '../UI/Modal';
 // import Select from '../UI/select/index';
 import Select from '../UI/select2/index';
 import Dropdown from '../UI/dropdown/index';
+import DropdownSelect from '../UI/dropdown-select/index';
 
 // import { Sortable } from '../UI/sortable/sortable';
 import { Switch } from '../components/Switch';
@@ -234,6 +235,14 @@ function Potion() {
             <Button variant="secondary">Button</Button>
             <br></br>
             <br></br>
+            <Button variant="secondary">Button</Button>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <Button variant="secondary">Button</Button>
+            <br></br>
+            <br></br>
             <Button variant="minimal">Button</Button>
 
             <br></br>
@@ -366,13 +375,13 @@ function Potion() {
             <br></br>
             <br></br>
             <Flex direction="row" css={{ gap: '100px' }}>
-              <Select type="single">
-                <Select.Item key="saba"> Placeholder1</Select.Item>
+              <Select type="single" placeholder={'Select Input'}>
+                <Select.Item key="1"> Placeholder1</Select.Item>
                 <Select.Item> Placeholder 2 </Select.Item>
                 <Select.Item> Placeholder 3 </Select.Item>
                 <Select.Item> Placeholder 4 </Select.Item>
               </Select>
-              <Select type={'multi'}>
+              <Select type={'multi'} placeholder={'Select Input y'}>
                 <Select.Item> Placeholder 1 </Select.Item>
                 <Select.Item> Placeholder 2 </Select.Item>
                 <Select.Item> Placeholder 3 </Select.Item>
@@ -414,8 +423,9 @@ function Potion() {
             <br></br>
             <br></br>
             <Flex direction="row" css={{ gap: '70px', flexWrap: 'wrap' }}>
-              <Dropdown
+              <DropdownSelect
                 selection="single"
+                width="130px"
                 options={[
                   { id: 'placeholder 1', name: 'placeholder 1' },
                   { id: 'placeholder 2', name: 'placeholder 2' },
@@ -423,14 +433,15 @@ function Potion() {
                   { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
-                <Dropdown.Trigger>
+                <DropdownSelect.Trigger>
                   {/* <Demo isOpen={true} title="we"></Demo> */}
                   <Button variant="primaryPlusIcon">Single Select</Button>
-                </Dropdown.Trigger>
-              </Dropdown>
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
 
-              <Dropdown
+              <DropdownSelect
                 selection="multiple"
+                width="216px"
                 options={[
                   { id: 'placeholder 1', name: 'placeholder 1' },
                   { id: 'placeholder 2', name: 'placeholder 2' },
@@ -438,13 +449,14 @@ function Potion() {
                   { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
-                <Dropdown.Trigger>
+                <DropdownSelect.Trigger>
                   {/* <Demo isOpen={true} title="we"></Demo> */}
                   <Button variant="secondaryPlusIcon">Multi Select</Button>
-                </Dropdown.Trigger>
-              </Dropdown>
-              <Dropdown
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
+              <DropdownSelect
                 selection="none"
+                width="114px"
                 options={[
                   { id: 'placeholder 1', name: 'placeholder 1' },
                   { id: 'placeholder 2', name: 'placeholder 2' },
@@ -452,15 +464,16 @@ function Potion() {
                   { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
-                <Dropdown.Trigger>
+                <DropdownSelect.Trigger>
                   {/* <Demo isOpen={true} title="we"></Demo> */}
                   <Button variant="primaryPlusIcon">Menu</Button>
-                </Dropdown.Trigger>
-              </Dropdown>
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
 
-              <Dropdown
+              <DropdownSelect
                 selection="multiple"
-                title={'Title goes here'}
+                width="216px"
+                title={'Title '}
                 options={[
                   { id: 'placeholder 1', name: 'placeholder 1' },
                   { id: 'placeholder 2', name: 'placeholder 2' },
@@ -468,13 +481,14 @@ function Potion() {
                   { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
-                <Dropdown.Trigger>
+                <DropdownSelect.Trigger>
                   {/* <Demo isOpen={true} title="we"></Demo> */}
                   <Button variant="secondaryPlusIcon">Title</Button>
-                </Dropdown.Trigger>
-              </Dropdown>
-              <Dropdown
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
+              <DropdownSelect
                 selection="multiple"
+                width="216px"
                 title={'Title goes here'}
                 isReset={true}
                 options={[
@@ -484,14 +498,14 @@ function Potion() {
                   { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
-                <Dropdown.Trigger>
-                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                <DropdownSelect.Trigger>
                   <Button variant="secondaryPlusIcon">Title and reset</Button>
-                </Dropdown.Trigger>
-              </Dropdown>
-              <Dropdown
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
+              <DropdownSelect
                 selection="multiple"
                 search={true}
+                width="216px"
                 options={[
                   { id: 'placeholder 1', name: 'placeholder 1' },
                   { id: 'placeholder 2', name: 'placeholder 2' },
@@ -499,17 +513,17 @@ function Potion() {
                   { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
-                <Dropdown.Trigger>
-                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                <DropdownSelect.Trigger>
                   <Button variant="secondaryPlusIcon">search</Button>
-                </Dropdown.Trigger>
-              </Dropdown>
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
 
-              <Dropdown
+              <DropdownSelect
                 selection="multiple"
                 // search={true}
                 drag
                 title="title"
+                width="216px"
                 options={[
                   { id: 'placeholder 1', name: 'placeholder 1' },
                   { id: 'placeholder 2', name: 'placeholder 2' },
@@ -517,11 +531,58 @@ function Potion() {
                   { id: 'placeholder 4', name: 'placeholder 4' },
                 ]}
               >
-                <Dropdown.Trigger>
-                  {/* <Demo isOpen={true} title="we"></Demo> */}
+                <DropdownSelect.Trigger>
                   <Button variant="secondaryPlusIcon">Drag</Button>
-                </Dropdown.Trigger>
-              </Dropdown>
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
+              <DropdownSelect
+                selection="multiple"
+                width="224px"
+                search={true}
+                drag
+                // title="title"
+                options={[
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
+                  { id: '5', name: 'snail' },
+                  { id: '6', name: 'nail' },
+                  { id: '7', name: 'paper' },
+                  { id: '8', name: 'balloon' },
+                  { id: '9', name: 'Candy' },
+                  { id: '10', name: 'rain' },
+                ]}
+              >
+                <DropdownSelect.Trigger>
+                  <DropdownSelect.SelectButton placeholder={'Select Input'} isOpen={false} />
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
+
+              <DropdownSelect
+                selection="multiple"
+                width="224px"
+                search={true}
+                drag
+                avatar
+                // title="title"
+                options={[
+                  { id: 'placeholder 1', name: 'placeholder 1' },
+                  { id: 'placeholder 2', name: 'placeholder 2' },
+                  { id: 'placeholder 3', name: 'placeholder 3' },
+                  { id: 'placeholder 4', name: 'placeholder 4' },
+                  { id: '5', name: 'snail' },
+                  { id: '6', name: 'nail' },
+                  { id: '7', name: 'paper' },
+                  { id: '8', name: 'balloon' },
+                  { id: '9', name: 'Candy' },
+                  { id: '10', name: 'rain' },
+                ]}
+              >
+                <DropdownSelect.Trigger>
+                  <DropdownSelect.SelectButton placeholder={'Select Input'} isOpen={false} />
+                </DropdownSelect.Trigger>
+              </DropdownSelect>
             </Flex>
             <br></br>
             <br></br>

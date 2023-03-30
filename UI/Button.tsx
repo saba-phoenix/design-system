@@ -76,7 +76,7 @@ export const StyledButton = styled('button', {
       },
 
       secondary: {
-        boxSizing: 'border-box',
+        boxSizing: 'context-box',
         backgroundColor: '$white',
         color: '$black',
         px: '16px',
@@ -240,6 +240,10 @@ export const StyledButton = styled('button', {
         },
       },
     },
+    focused: {
+      true: {},
+    },
+
     disabled: {
       true: {
         backgroundColor: '$dividerGray',
@@ -248,6 +252,36 @@ export const StyledButton = styled('button', {
       },
     },
   },
+  compoundVariants: [
+    {
+      variant: 'secondary',
+      focused: true,
+      css: {
+        border: '1px solid $primaryBlue',
+      },
+    },
+    {
+      variant: 'secondaryPlusIcon',
+      focused: true,
+      css: {
+        border: '1px solid $primaryBlue',
+      },
+    },
+    {
+      variant: 'secondaryIcon',
+      focused: true,
+      css: {
+        border: '1px solid $primaryBlue',
+      },
+    },
+    {
+      variant: 'secondaryIconSmall',
+      focused: true,
+      css: {
+        border: '1px solid $primaryBlue',
+      },
+    },
+  ],
   defaultVariants: {
     variant: 'primary',
   },
@@ -285,11 +319,12 @@ type Props = {
   disabled?: boolean;
   css?: CSS;
   onClick?: () => void;
+  focused?: boolean;
   children?: ReactNode | ReactNode[];
 };
 
 export const Button = forwardRef<HTMLButtonElement, Props>((allProps: Props, ref) => {
-  const { variant, children, disabled = false, onClick, ...props } = allProps;
+  const { variant, children, disabled = false, focused = false, onClick, ...props } = allProps;
   const demoRef = useDOMRef(ref);
   const { buttonProps } = useButton(allProps, demoRef);
   return (
@@ -297,6 +332,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>((allProps: Props, ref
       ref={demoRef}
       variant={variant}
       disabled={disabled}
+      focused={focused}
       {...buttonProps}
       onClick={onClick}
     >

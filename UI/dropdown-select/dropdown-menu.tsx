@@ -20,7 +20,7 @@ import { DropdownSearch } from './dropdown-search';
 import { DndContext, MouseSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core';
 
 import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
-import { SortableContext, arrayMove as reorderItems, NewIndexGetter } from '@dnd-kit/sortable';
+import { SortableContext, arrayMove as reorderItems } from '@dnd-kit/sortable';
 
 interface Props<T> extends AriaListBoxProps<T>, DOMProps, AriaLabelingProps {
   as?: keyof JSX.IntrinsicElements;
@@ -46,13 +46,12 @@ const DropdownMenu = (props: SelectMenuProps) => {
     selectedKeys,
     setSelectedKeys,
     setDragging,
+    width,
   } = context;
 
   const completeProps = {
     ...mergeProps(context, otherProps),
   };
-
-  const width = selection === 'multiple' ? '216px' : selection === 'single' ? '130px' : '114px';
 
   const domRef = useDOMRef(context.ref);
 
@@ -85,7 +84,6 @@ const DropdownMenu = (props: SelectMenuProps) => {
   const getIndex = (id: UniqueIdentifier) => items.findIndex((item) => item.id === id);
   const activeIndex = activeId ? getIndex(activeId) : -1;
 
-  // saba: need to fix padding
   return (
     <StyledDropdownMenu
       css={{
@@ -115,16 +113,16 @@ const DropdownMenu = (props: SelectMenuProps) => {
               <Button
                 variant="noStyle"
                 css={{
+                  color: '$clickBlue',
                   maxHeight: 'min-content',
                   alignItems: 'flex-start',
                   alignContent: 'flex-start',
                 }}
                 onClick={() => {
-                  console.log('Hello saba');
                   reset();
                 }}
               >
-                <Text variant="rabbit" color="$primaryBlue">
+                <Text variant="rabbit" color="$primaryBlue" css={{ color: '$primaryBlue' }}>
                   Reset
                 </Text>
               </Button>
@@ -171,6 +169,8 @@ const DropdownMenu = (props: SelectMenuProps) => {
                       id={item.key.toString()}
                       item={item}
                       state={state}
+                      avatarSrc={item.props.avatarSrc}
+                      avatarFallback={item.props.avatarFallback}
                     />
                   );
                   if (item.wrapper) {

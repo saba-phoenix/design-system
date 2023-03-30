@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 
 import * as Popover from '@radix-ui/react-popover';
-import { Section } from '@react-stately/collections';
 
 import { __DEV__ } from '../utils/assertion';
 import DropdownItemBase from './base/dropdown-item-base';
 import { DropdownProvider } from './dropdown-context';
 import DropdownMenu from './dropdown-menu';
 import DropdownTrigger from './dropdown-trigger';
+import { SelectButton } from './select-button';
 import { useDropdown, UseDropdownProps } from './use-dropdown';
 
 interface Props extends UseDropdownProps {}
@@ -30,7 +30,6 @@ const Dropdown = (props: DropdownProps) => {
             sideOffset={4}
             align={'start'}
             onPointerDownOutside={() => {
-              console.log('focus');
               if (context.isOpen === true) {
                 context.setOpen(false);
               }
@@ -52,7 +51,7 @@ type DropdownComponent<P = Record<string, unknown>> = React.FC<P> & {
   Trigger: typeof DropdownTrigger;
   Menu: typeof DropdownMenu;
   Item: typeof DropdownItemBase;
-  Section: typeof Section;
+  SelectButton: typeof SelectButton;
 };
 
 Dropdown.toString = () => '.potionui-Dropdown';

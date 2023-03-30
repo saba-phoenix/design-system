@@ -3,7 +3,6 @@ import React, { ReactNode, Key, useRef } from 'react';
 import { useHover, usePress } from '@react-aria/interactions';
 import { useOption } from '@react-aria/listbox';
 import { mergeProps } from '@react-aria/utils';
-import { TreeState } from '@react-stately/tree';
 import { ListState } from '@react-stately/list';
 import { Node } from '@react-types/shared';
 import type { FocusableProps } from '@react-types/shared';
@@ -22,15 +21,16 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS as DndCSS } from '@dnd-kit/utilities';
 import { Holder } from '../Icons/Holder';
 import { Flex } from '../Flex';
+import Avatar from '../Avatar';
 
 interface Props<T> extends FocusableProps {
   item: Node<T>;
   state: ListState<T>;
   description?: string;
-  icon?: ReactNode;
   id: string;
   as?: keyof JSX.IntrinsicElements;
-
+  avatarSrc?: string;
+  avatarFallback?: string;
   onAction?: (key: Key) => void;
 }
 
@@ -38,7 +38,12 @@ type NativeAttrs = Omit<React.HTMLAttributes<unknown>, keyof Props<object>>;
 
 export type SelectItemProps<T = object> = Props<T> & NativeAttrs & { css?: CSS };
 
-const DropdownItem = <T extends object>({ item, state }: SelectItemProps<T>) => {
+const DropdownItem = <T extends object>({
+  item,
+  state,
+  avatarFallback,
+  avatarSrc,
+}: SelectItemProps<T>) => {
   const { rendered, key } = item;
 
   const { selection, setOpen } = useDropdownContext();
@@ -77,7 +82,6 @@ const DropdownItem = <T extends object>({ item, state }: SelectItemProps<T>) => 
   );
 
   if (isPressed) {
-    console.log('isPressed', isPressed);
     switch (selection) {
       case 'multiple':
         break;
@@ -110,18 +114,26 @@ const DropdownItem = <T extends object>({ item, state }: SelectItemProps<T>) => 
         >
           <StyledDropdownItemContent
             className="potionui-Dropdown-item-content"
-            onClick={(e) => {
-              console.log('dnd act item pressed');
-            }}
+            onClick={(e) => {}}
             {...labelProps}
           >
             {selection !== 'none' && (
-              <Flex direction="row" gap={8}>
+              <Flex
+                direction="row"
+                css={{
+                  justifyContent: 'left',
+                  gap: '8px',
+                  width: '100%',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <CheckBox
                   status={
                     isSelected ? 'selected' : selection === 'multiple' ? 'unselected' : 'plain'
                   }
                 />
+                {context.avatar && <Avatar src={avatarSrc} fallback={avatarFallback} />}
                 {rendered}
               </Flex>
             )}

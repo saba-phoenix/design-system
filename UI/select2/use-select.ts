@@ -32,7 +32,6 @@ export function useSelect(props: UseSelectProps) {
     })
   );
 
-  console.log('items', items);
   return {
     selectedKeys: state.selectionManager.selectedKeys,
     setSelectedKeys: state.selectionManager.setSelectedKeys,

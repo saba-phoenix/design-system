@@ -11,6 +11,7 @@ import { useSelectContext } from './select-context';
 
 export interface SelectTriggerProps {
   children?: React.ReactNode;
+  placeholder: string;
   css?: CSS;
 }
 
@@ -22,10 +23,11 @@ const SelectTrigger = React.forwardRef(
   (props: SelectTriggerProps, ref: ReactRef<HTMLButtonElement>) => {
     const { state, isOpen } = useSelectContext();
     const buttonRef = useDOMRef(ref);
+    const { placeholder } = props;
 
     return (
       <Popover.Trigger asChild>
-        <SelectButton isOpen={isOpen} ref={buttonRef} />
+        <SelectButton isOpen={isOpen} placeholder={placeholder} ref={buttonRef} />
       </Popover.Trigger>
     );
   }

@@ -6,7 +6,8 @@ import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 
 import { styled } from '../../stitches.config';
 import { useDOMRef } from '../utils/dom';
-import { useSelectContext } from './select-context';
+import { useDropdownContext } from './dropdown-context';
+import type { Option } from './use-dropdown';
 
 export const StyledButton = styled('button', {
   all: 'unset',
@@ -16,7 +17,7 @@ export const StyledButton = styled('button', {
   justifyContent: 'space-between',
   borderRadius: '4px',
   padding: '12px',
-  width: '224px',
+  // width: '224px',
   height: '36px',
 
   fontFamily: '$system',
@@ -41,6 +42,7 @@ export const StyledButton = styled('button', {
     },
     isOpen: {
       true: {
+        padding: '11px',
         border: '2px solid #0069DA',
       },
       false: {},
@@ -48,18 +50,15 @@ export const StyledButton = styled('button', {
   },
 });
 
-const getTitleFromSelectedKeys = (
-  items: {
-    [k: string]: string;
-  },
-  selectedKeys: Set<React.Key>
-) => {
-  let titleStrings = Object.entries(items)
-    .filter(([key, value]) => selectedKeys.has(key))
-    .map(([key, value]) => value)
+const getTitleFromDropdownedKeys = (items: Option[], selectedKeys: Set<React.Key>) => {
+  let titleStrings = items
+    .filter(({ id, name }) => {
+      return selectedKeys.has(id);
+    })
+    .map(({ id, name }) => name)
     .join(', ');
-  if (titleStrings.length > 33) {
-    titleStrings = titleStrings.substr(0, 30).concat('...');
+  if (titleStrings.length > 31) {
+    titleStrings = titleStrings.substr(0, 28).concat('...');
   }
   return titleStrings;
 };
@@ -70,8 +69,8 @@ export const SelectButton = React.forwardRef<
 >((props, ref) => {
   const demoRef = useDOMRef(ref);
   const { buttonProps } = useButton(props, demoRef);
-  const { items, selectedKeys } = useSelectContext();
-  let title = getTitleFromSelectedKeys(items, selectedKeys);
+  const { items, selectedKeys, width } = useDropdownContext();
+  let title = getTitleFromDropdownedKeys(items, selectedKeys);
   const { isOpen, placeholder } = props;
   let status;
   if (!title || title == '') {
@@ -79,7 +78,13 @@ export const SelectButton = React.forwardRef<
     title = placeholder;
   } else status = 'full';
   return (
-    <StyledButton ref={demoRef} status={status} isOpen={isOpen} {...mergeProps(buttonProps)}>
+    <StyledButton
+      ref={demoRef}
+      status={status}
+      isOpen={isOpen}
+      css={{ width }}
+      {...mergeProps(buttonProps)}
+    >
       <div
         style={{
           display: 'flex',
@@ -91,8 +96,8 @@ export const SelectButton = React.forwardRef<
         }}
       >
         <p>{title}</p>
-        {isOpen && <AiOutlineUp />}
-        {!isOpen && <AiOutlineDown color={'#C2C2C2'} />}
+        {isOpen && <AiOutlineUp height="6px" width="8.91px" />}
+        {!isOpen && <AiOutlineDown color={'#C2C2C2'} height="6px" width="8.91px" />}
       </div>
     </StyledButton>
   );

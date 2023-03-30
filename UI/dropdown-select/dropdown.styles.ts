@@ -16,13 +16,13 @@ export const StyledDropdownUnorderedList = styled('ul', {
 export const StyledDropdownMenu = styled('div', {
   $$selectItemHeight: '40px',
   $$selectMenuPadding: '1px',
-  $$selectMenuWidth: '224px',
-  $$selectMenuMinWidth: '224px',
+  $$selectMenuWidth: '450px',
 
   position: 'relative',
   maxWidth: '$$selectMenuWidth',
-  minWidth: '$$selectMenuMinWidth',
-  width: '216px',
+
+  maxHeight: '280px',
+  overflow: 'auto',
   py: '4px',
   px: '4px',
   m: 0,

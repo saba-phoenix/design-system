@@ -13,7 +13,7 @@ export interface SelectTriggerProps {
 }
 
 /**
- * SelectTrigger opens the popover's content. It must be an interactive element
+ * DropdownTrigger opens the popover's content. It must be an interactive element
  * such as `button` or `a`.
  */
 const DropdownTrigger = React.forwardRef(
@@ -22,7 +22,7 @@ const DropdownTrigger = React.forwardRef(
     const { isOpen } = useDropdownContext();
     return (
       <Popover.Trigger asChild ref={ref}>
-        {React.cloneElement(children as ReactElement, { focused: isOpen })}
+        {React.cloneElement(children as ReactElement, { focused: isOpen, isOpen: isOpen })}
       </Popover.Trigger>
     );
   }

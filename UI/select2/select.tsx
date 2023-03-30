@@ -19,6 +19,7 @@ interface Props extends UseSelectProps {
    * The content of the select. It is usually the `Select.Trigger`,
    * and `Select.Menu`
    */
+  placeholder: string;
   type: 'single' | 'multi';
   children: CollectionChildren<any>;
 }
@@ -26,7 +27,7 @@ interface Props extends UseSelectProps {
 export type SelectProps = Props;
 
 const Select = (props: SelectProps) => {
-  const { children, type = 'multi' } = props;
+  const { children, type = 'multi', placeholder } = props;
   const context = useSelect(props);
   const ref = useRef<HTMLUListElement>(null);
   console.log('rerendered');
@@ -34,7 +35,7 @@ const Select = (props: SelectProps) => {
   return (
     <SelectProvider value={context}>
       <Popover.Root {...context.popoverProps} open={context.isOpen} onOpenChange={context.setOpen}>
-        <SelectTrigger />
+        <SelectTrigger placeholder={placeholder} />
         <Popover.Portal>
           <Popover.Content
             side="bottom"

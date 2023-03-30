@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { AriaListBoxProps } from '@react-types/listbox';
 import { Node } from '@react-types/shared';
 import DropdownItemBase from './base/dropdown-item-base';
 
-type Option = {
+export type Option = {
   id: string;
   name: string;
   avatarSrc?: string;
@@ -15,6 +15,7 @@ type PopoverProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   modal?: boolean;
+  width: string;
   selection: 'single' | 'multiple' | 'none';
   ref?: React.RefObject<HTMLUListElement | null>;
   title?: string;
@@ -40,6 +41,7 @@ export function useDropdown(props: UseDropdownProps) {
     options,
     drag,
     avatar,
+    width,
     ...popoverProps
   } = props;
 
@@ -49,8 +51,10 @@ export function useDropdown(props: UseDropdownProps) {
   const [items, setItems] = useState<Option[]>(options);
   const [isDragging, setDragging] = useState<boolean>(false);
 
-  const collections = items.map(({ id, name }) => (
-    <DropdownItemBase key={id}>{name}</DropdownItemBase>
+  const collections = items.map(({ id, name, avatarSrc, avatarFallback }) => (
+    <DropdownItemBase key={id} avatarSrc={avatarSrc} avatarFallBack={avatarFallback}>
+      {name}
+    </DropdownItemBase>
   ));
 
   const searchFunc = (item: Node<any>) => {
@@ -60,6 +64,7 @@ export function useDropdown(props: UseDropdownProps) {
   };
 
   return {
+    width,
     avatar,
     isOpen,
     setOpen,
